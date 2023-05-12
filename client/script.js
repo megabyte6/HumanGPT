@@ -1,5 +1,4 @@
 //Websocekt variables
-const url = "ws://localhost:9876/myWebsocket"
 const mywsServer = new WebSocket("ws://localhost:8080")
 
 //DOM Elements
