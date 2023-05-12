@@ -7,6 +7,7 @@ import internal = require("stream")
 
 const app = express()
 app.use("/", express.static(path.resolve(__dirname, "../client")))
+app.use("/host", express.static(path.resolve(__dirname, "../client/host")))
 
 const server = app.listen(8080, () => console.log("Listening..."))
 
