@@ -5,7 +5,8 @@
   "main": "dist/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc"
+    "build": "tsc",
+    "start": "nodemon src/server.ts"
   },
   "repository": {
     "type": "git",
@@ -19,7 +20,9 @@
   "homepage": "https://github.com/megabyte6/computer-science-project#readme",
   "devDependencies": {
     "@types/express": "^4.17.17",
+    "@types/node": "^20.1.3",
     "@types/ws": "^8.5.4",
+    "nodemon": "^2.0.22",
     "typescript": "^5.0.4"
   },
   "dependencies": {
