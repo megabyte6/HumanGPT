@@ -1,5 +1,6 @@
 import { WebSocket, WebSocketServer } from "ws"
 import { IncomingMessage } from "http"
+import Game from "./Game"
 
 import express = require("express")
 import path = require("path")
@@ -13,11 +14,15 @@ const server = app.listen(8080, () => console.log("Listening..."))
 
 const websocketServer = new WebSocketServer({ noServer: true })
 
-websocketServer.on("connection", (client, request) => {
-    let addr = request.socket.remoteAddress ?? "Anonymous"
-    console.log(`Client (${addr}) connected`)
+const game = new Game()
 
-    client.on("message", (message: string) => broadcast(message))
+server.on("upgrade", async (request: IncomingMessage, socket: internal.Duplex, head: Buffer) => {
+    websocketServer.handleUpgrade(request, socket, head, (client) => {
+        let addr = request.socket.remoteAddress ?? "Anonymous"
+        console.log(`Client (${addr}) connected`)
+
+        client.on("message", (message: string) => broadcast(message))
+    })
 })
 
 function broadcast(message: string) {
@@ -26,9 +31,3 @@ function broadcast(message: string) {
             client.send(message.toString())
     })
 }
-
-server.on("upgrade", async (request: IncomingMessage, socket: internal.Duplex, head: Buffer) => {
-    websocketServer.handleUpgrade(request, socket, head, (client) => {
-        websocketServer.emit("connection", client, request)
-    })
-})
