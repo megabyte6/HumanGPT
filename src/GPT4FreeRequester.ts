@@ -1,8 +1,11 @@
 import fetch from 'node-fetch-commonjs'
 export default class GPT4FreeRequester{
 
-    async getResponse(prompt:string){
-        const body = {"request":prompt};
+
+    async getResponse(prompt:string, chatid?:number){
+        const body = {
+            "request": prompt
+        };
 
         const response = await fetch('http://127.0.0.1:8008', {
 	        method: 'POST',
@@ -20,5 +23,9 @@ export default class GPT4FreeRequester{
 
 
 
+
+}
+
+class ChatEntry{
 
 }

@@ -1,8 +1,34 @@
 //Websocekt variables
 const mywsServer = new WebSocket("ws://localhost:8080")
+const submitButton = document.getElementById("submitNameButton");
 
+const askButton = document.getElementById("submitGPTButton");
+
+
+submitButton.onclick = ()=>{
+    let msg = {
+        operation: "init",
+        arguments: {
+            "name": document.getElementById("name").value
+        }
+        
+    }
+    console.log(JSON.stringify(msg))
+    mywsServer.send(JSON.stringify(msg))
+}
+askButton.onclick = ()=>{
+    let msg = {
+        operation: "getgpt",
+        arguments: {
+            "prompt": document.getElementById("gptask").value
+        }
+        
+    }
+    console.log(JSON.stringify(msg))
+    mywsServer.send(JSON.stringify(msg))
+}
 //DOM Elements
-const myCanvas = document.getElementById("myCanvas")
+/*const myCanvas = document.getElementById("myCanvas")
 const ctx = myCanvas.getContext("2d");
 let mouseDown = 0;
 let pageX = 0;
@@ -62,11 +88,11 @@ function addtoGrid(msg) {
 //enabling send message when connection is open
 mywsServer.onopen = function() {
     console.log("open")
-}
+}*/
 //handling message event
 mywsServer.onmessage = function(event) {
     const { data } = event;
-    document.getElementById("test").textContent = data;
+    document.getElementById("response").textContent = data;
     
     addtoGrid(data);
 }

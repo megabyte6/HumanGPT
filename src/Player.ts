@@ -8,7 +8,8 @@ export default class Player {
 
     constructor(client: WebSocket, name: string) {
         this.client = client;
-        this.name = name
+        this.name = name;
+        console.log("new player! with name",name)
     }
 
 }

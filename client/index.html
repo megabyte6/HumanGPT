@@ -9,11 +9,22 @@
     <title>Computer Science Project</title>
 
     <script defer src="script.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
     <h1 id="test">Test</h1>
-    <canvas id="myCanvas" width="500px" height="500px"></canvas>
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required minlength="1" maxlength="20" size="20">
+    <div>
+        <button id="submitNameButton">Submit</button>
+    </div>
+    <label for="gptask">Submit to GPT:</label>
+    <textarea id="gptask" name="gptask" rows="4" cols="50"></textarea>
+    <div>
+        <button id="submitGPTButton">Submit</button>
+    </div>
+    <p id="response"></p>
 </body>
 
 </html>
