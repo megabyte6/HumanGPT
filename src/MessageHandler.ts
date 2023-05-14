@@ -13,10 +13,7 @@ export default class MessageHandler {
     }
 
     handle(message: MessageEvent, client: WebSocket) {
-        
-        
-        
-        
+
         const data: Message = JSON.parse(message.toString())
 
         switch (data.operation.toLowerCase()) {
@@ -32,15 +29,13 @@ export default class MessageHandler {
                         break
                 }
             case "getgpt":
-                const gptplayer = this.game.getPlayerFromClient(client)
-                if (gptplayer === null)
+                const gptPlayer = this.game.getPlayerFromClient(client)
+                if (gptPlayer === null)
                     break
-                this.game.askAndSendGPT(data.arguments["prompt"],gptplayer);
+                this.game.askAndSendGPT(data.arguments["prompt"], gptPlayer);
                 break;
             default:
                 console.log(`"${data.operation}" is not a valid operation`)
-
-                
                 break
         }
     }
