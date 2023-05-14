@@ -4,7 +4,7 @@
 A game using ChatGPT
 
 ## Building
-1. Install [nodejs](https://nodejs.org/en/download) and [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) as you will need them to build and run the project.
+1. Install [node.js](https://nodejs.org/en/download) and [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) as you will need them to build and run the project.
 1. Copy your OpenAI API key from [here](https://platform.openai.com/account/api-keys).
 1. Create the file `./res/open-api-key.txt` and paste your OpenAI API key.
 1. Set the ip address of your computer in `./client/script.js` and `./client/host/script.js`.
