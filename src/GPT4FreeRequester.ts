@@ -26,6 +26,3 @@ export default class GPT4FreeRequester{
 
 }
 
-class ChatEntry{
-
-}
