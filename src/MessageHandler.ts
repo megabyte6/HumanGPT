@@ -1,6 +1,5 @@
 import { WebSocket, WebSocketServer } from "ws"
 import Game from "./Game"
-import Message from "./Message"
 import Player from "./Player"
 
 export default class MessageHandler {
@@ -30,7 +29,7 @@ export default class MessageHandler {
                 }
             default:
                 console.log(`"${data.operation}" is not a valid operation`)
-                
+
                 // TODO: Remove after front end no longer uses this
                 this.broadcast(message)
                 break
@@ -43,5 +42,12 @@ export default class MessageHandler {
                 client.send(message.toString())
         })
     }
+
+}
+
+export interface Message {
+
+    operation: string
+    arguments: { [key: string]: any }
 
 }
