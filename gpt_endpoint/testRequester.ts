@@ -1,5 +1,5 @@
-import * as readline from 'readline';
-import GPT4FreeRequester from '../src/GPT4FreeRequester';
+import * as readline from "readline";
+import GPT4FreeRequester from "../src/GPT4FreeRequester";
 
 let rl = readline.createInterface({
     input: process.stdin,
@@ -8,7 +8,7 @@ let rl = readline.createInterface({
 let gpt = new GPT4FreeRequester();
 
 function triggerquestion() {
-    rl.question('Prompt: ', async (answer) => {
+    rl.question("Prompt: ", async (answer) => {
         let reply = await gpt.getResponse(answer);
         console.log("AI:", reply);
 
