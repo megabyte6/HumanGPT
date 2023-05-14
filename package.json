@@ -2,11 +2,12 @@
   "name": "computer-science-project",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/server.js",
+  "main": "dist/server.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "start": "nodemon src/server.ts"
+    "start": "nodemon src/server.ts",
+    "startgpt": "python3 gpt_endpoint/server.py"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,7 @@
   },
   "dependencies": {
     "express": "^4.18.2",
+    "node-fetch-commonjs": "^3.2.4",
     "openai": "^3.2.1",
     "ws": "^8.13.0"
   }
