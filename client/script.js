@@ -1,5 +1,5 @@
 //Websocekt variables
-const mywsServer = new WebSocket("ws://localhost:8080")
+const mywsServer = new WebSocket(`ws://${window.location.host}`)
 const submitButton = document.getElementById("submitNameButton");
 
 const askButton = document.getElementById("submitGPTButton");

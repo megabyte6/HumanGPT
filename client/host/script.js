@@ -1,4 +1,5 @@
-const mywsServer = new WebSocket("ws://localhost:8080")
+
+const mywsServer = new WebSocket(`ws://${window.location.host}`)
 
 mywsServer.onopen = function(event){
     let msg = {
