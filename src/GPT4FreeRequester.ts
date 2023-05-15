@@ -6,16 +6,23 @@ export default class GPT4FreeRequester {
         const body = {
             "request": prompt
         }
+        try{
+            const response = await fetch("http://127.0.0.1:8008", {
+                method: "POST",
+                body: JSON.stringify(body),
+                headers: { "Content-Type": "application/json" }
+            })
+            const data: any = await response.json()
 
-        const response = await fetch("http://127.0.0.1:8008", {
-            method: "POST",
-            body: JSON.stringify(body),
-            headers: { "Content-Type": "application/json" }
-        })
+            return data["response"]
 
-        const data: any = await response.json()
+        }catch(exception){
+            console.log("GPT fetch failed, check if the endpoint is open")
+        }
+        return "Fetch Failed"
+        
 
-        return data["response"]
+        
     }
 
 }
