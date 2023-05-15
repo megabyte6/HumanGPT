@@ -94,5 +94,5 @@ mywsServer.onmessage = function(event) {
     const { data } = event;
     document.getElementById("response").textContent = data;
     
-    addtoGrid(data);
+    //addtoGrid(data);
 }

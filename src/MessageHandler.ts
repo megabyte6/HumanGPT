@@ -1,11 +1,12 @@
 import { WebSocket, WebSocketServer } from "ws"
 import Game from "./Game"
 import Player from "./Player"
+import Host from "./Host"
 
 export default class MessageHandler {
 
     wsServer: WebSocketServer;
-    game: Game
+    game: Game;
 
     constructor(wsServer: WebSocketServer, game: Game) {
         this.wsServer = wsServer;
@@ -17,26 +18,25 @@ export default class MessageHandler {
         const data: Message = JSON.parse(message.toString())
 
         switch (data.operation.toLowerCase()) {
-            case "init":
-                this.game.players.push(new Player(client, data.arguments["name"]))
-                break
-            case "set":
-                const player = this.game.getPlayerFromClient(client)
-                if (player === null)
-                    break
-                for (const argument in data.arguments) {
-                    if (!Object.keys(player).includes(argument))
-                        break
-                }
-            case "getgpt":
-                const gptPlayer = this.game.getPlayerFromClient(client)
-                if (gptPlayer === null)
-                    break
-                this.game.askAndSendGPT(data.arguments["prompt"], gptPlayer);
+            case "init": {
+                this.init(client, data);
                 break;
+            }
+            case "set": {
+                this.set(client, data);
+                break;
+            } 
+            case "getgpt": {
+                this.getgpt(client, data);
+                break;
+            } 
+            case "init_host": {
+                this.init_host(client, data);
+                break;
+            } 
             default:
                 console.log(`"${data.operation}" is not a valid operation`)
-                break
+                break;
         }
     }
 
@@ -45,6 +45,75 @@ export default class MessageHandler {
             if (client.readyState === WebSocket.OPEN)
                 client.send(message.toString())
         })
+    }
+
+    //initializes a new Player
+    init(client: WebSocket, data: Message){
+        let player: Player = new Player(client, data.arguments["name"], this.game);
+        this.game.onPlayerJoin(player);
+        this.game.players.push(player);
+    }
+
+    //does nothing (currently)
+    set(client: WebSocket, data: Message){
+        const player = this.game.getPlayerFromClient(client)
+        if (player === null)
+            return;
+        for (const argument in data.arguments) {
+            if (!Object.keys(player).includes(argument))
+                return;
+        }
+        
+    }
+
+    //sends the client a gpt response
+    getgpt(client: WebSocket, data: Message){
+        const gptPlayer = this.game.getPlayerFromClient(client)
+        if (gptPlayer === null)
+            return;
+        this.game.askAndSendGPT(data.arguments["prompt"], gptPlayer);
+        
+    }
+
+    //initializes a Host
+    init_host(client: WebSocket, data: Message){
+        if(this.game.host == null){
+            this.game.host = new Host(client, this.game);
+        }
+    }
+
+    //broadcast player join
+    player_join(player: Player){
+        let data: Message = {
+            operation: "player_join",
+            arguments: {
+                "name": player.name
+            }
+        }
+        this.game.players.forEach(receiver => {
+            if (receiver.client.readyState === WebSocket.OPEN)
+                receiver.client.send(JSON.stringify(data))
+        });
+        if (this.game.host?.client.readyState === WebSocket.OPEN)
+                this.game.host?.client.send(JSON.stringify(data))
+        
+    }
+
+    //broadcast player leave
+    player_leave(player: Player){
+        let data: Message = {
+            operation: "player_leave",
+            arguments: {
+                "name": player.name
+            }
+        }
+        this.game.players.forEach(receiver => {
+            if (receiver.client.readyState === WebSocket.OPEN)
+                receiver.client.send(JSON.stringify(data))
+        });
+        if (this.game.host?.client.readyState === WebSocket.OPEN)
+                this.game.host?.client.send(JSON.stringify(data))
+        
     }
 
 }

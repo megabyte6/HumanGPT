@@ -15,6 +15,8 @@ const server = app.listen(8080, () => console.log("Listening..."))
 const websocketServer = new WebSocketServer({ noServer: true })
 const game = new Game()
 const messageHandler: MessageHandler = new MessageHandler(websocketServer, game);
+game.setHandler(messageHandler);
+
 
 server.on("upgrade", async (request: IncomingMessage, socket: internal.Duplex, head: Buffer) => {
     websocketServer.handleUpgrade(request, socket, head, (client) => {
