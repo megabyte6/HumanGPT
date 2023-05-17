@@ -33,6 +33,9 @@ export default class MessageHandler {
             case "trigger_start":
                 this.trigger_start(client, data)
                 break
+            case "submit_prompt":
+                this.submit_prompt(client, data)
+                break
             default:
                 console.log(`"${data.operation}" is not a valid operation`)
                 break
@@ -84,6 +87,11 @@ export default class MessageHandler {
     trigger_start(client: WebSocket, data: Message) {
         if (this.game.host?.client === client)
             this.start_game()
+    }
+
+    submit_prompt(client: WebSocket, data: Message) {
+        let player = this.game.getPlayerFromClient(client);
+        this.game.tryPrompt(data.arguments.prompt);
     }
 
 
