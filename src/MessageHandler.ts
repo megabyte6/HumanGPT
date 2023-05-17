@@ -89,7 +89,7 @@ export default class MessageHandler {
         let names = this.game.players.map((player)=>player.name);
         console.log("names:", names)
         let data: Message = {
-            operation: "player_join",
+            operation: "players_update",
             arguments: {
                 "players": names
             }
