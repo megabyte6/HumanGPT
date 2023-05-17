@@ -1,4 +1,4 @@
-let stage = 0;
+let stage = 3;
 let name = "";
 let prompt = "";
 let inp;
@@ -6,6 +6,7 @@ let newPrompt = "";
 let writing = [];
 let msg;
 let server;
+let players = [];
 
 function setup() {
   if (500 * (windowHeight / 300) < windowWidth) {
@@ -78,12 +79,20 @@ function draw() {
 	if (stage == 2) {
     noStroke();
     fill(50, 168, 109);
-    text("Waiting for other players...", 250, 150);
+    text("Waiting for other players to join...", 250, 150);
+		for (let i = 0; i < players.length; i++) {
+			text(players[i], 250, 175 + i*20);
+		}
   }
 	if (stage == 4) {
     noStroke();
     fill(50, 168, 109);
-    text("Prompt: " + newPrompt, 250, 150);
+    text("Waiting for all players to answer...", 250, 150);
+  }
+	if (stage == 5) {
+    noStroke();
+    fill(50, 168, 109);
+    text("Write a paragraph about " + newPrompt, 250, 150);
   }
   pop();
 }
@@ -95,10 +104,10 @@ function keyPressed() {
 			inp.size(0, 0);
 			inp.position(-1000, -1000);
 			msg = {
-				operation: "init",
+				operation: "",
 				arguments: {
 					"name": name
-        }
+				}
 			}
 			server.send(JSON.stringify(msg));
 		}
@@ -107,12 +116,24 @@ function keyPressed() {
 			stage = 4;
 			inp.size(0, 0);
 			inp.position(-1000, -1000);
+			//send prompt to server
 		}
 	}
 }
 
+server.onmessage = function(event) {
+	const { data } = event;
+	let message = JSON.parse(data);
+	if (message.operation == "player_join") {
+		players.push(message.arguments.name);
+	}
+	if (message.operation == "player_leave") {
+		players.splice(players.indexOf(message.arguments.name), 1);
+	}
+}
+
 function mousePressed() {
-	//startGame();
+	if (stage == 2) startGame();
 }
 
 function startGame() {
