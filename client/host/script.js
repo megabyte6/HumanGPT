@@ -36,3 +36,16 @@ mywsServer.onmessage = function(event) {
     
     //addtoGrid(data);
 }
+
+document.getElementById("startbutton").onclick = function(event) {
+    let msg = {
+        operation: "trigger_start",
+        arguments: {
+        }
+        
+    }
+    
+    console.log(JSON.stringify(msg))
+    mywsServer.send(JSON.stringify(msg))
+}
+

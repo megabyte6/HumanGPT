@@ -34,17 +34,24 @@ export default class MessageHandler {
                 this.init_host(client, data);
                 break;
             } 
+            case "trigger_start": {
+                this.trigger_start(client, data);
+                break;
+            } 
             default:
                 console.log(`"${data.operation}" is not a valid operation`)
                 break;
         }
     }
 
-    broadcast(message: MessageEvent) {
-        this.wsServer.clients.forEach(client => {
-            if (client.readyState === WebSocket.OPEN)
-                client.send(message.toString())
-        })
+    broadcast(message: Message) {
+        
+        this.game.players.forEach(receiver => {
+            if (receiver.client.readyState === WebSocket.OPEN)
+                receiver.client.send(JSON.stringify(message))
+        });
+        if (this.game.host?.client.readyState === WebSocket.OPEN)
+                this.game.host?.client.send(JSON.stringify(message))
     }
 
     //initializes a new Player
@@ -84,23 +91,40 @@ export default class MessageHandler {
         }
     }
 
+    //host triggers the game start
+    trigger_start(client: WebSocket, data: Message){
+        if(this.game.host?.client === client){
+            this.start_game();
+        }
+    }
+
+    
+
     //broadcast player update
     players_update(){
         let names = this.game.players.map((player)=>player.name);
-        console.log("names:", names)
         let data: Message = {
             operation: "players_update",
             arguments: {
                 "players": names
             }
         }
-        this.game.players.forEach(receiver => {
-            if (receiver.client.readyState === WebSocket.OPEN)
-                receiver.client.send(JSON.stringify(data))
-        });
-        if (this.game.host?.client.readyState === WebSocket.OPEN)
-                this.game.host?.client.send(JSON.stringify(data))
         
+        this.broadcast(data);
+        
+    }
+
+    start_game(){
+        console.log("starting");
+        let data: Message = {
+            operation: "start)game",
+            arguments: {
+                
+            }
+        }
+        
+        this.broadcast(data);
+
     }
 
     
