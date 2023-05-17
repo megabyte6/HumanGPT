@@ -52,9 +52,11 @@ export default class Game {
     }
 
     sendBackNewPrompts(){
+        let indexes = this.players.map((player,idx) => idx);
+        indexes = this.cycle(indexes, Math.floor((indexes.length-1) * Math.random()) + 1);
 
         this.players.forEach((player, idx) => {
-            this.handler?.new_prompt(player, this.prompts[idx],this.responses[idx])
+            this.handler?.new_prompt(player, this.prompts[indexes[idx]],this.responses[indexes[idx]])
 
         })
     }
@@ -74,30 +76,18 @@ export default class Game {
         this.responses.push(response);
         console.log(this.prompts, this.responses);
         if(this.prompts.length == this.players.length){
-            this.shuffle(this.prompts);
-            this.shuffle(this.responses);
             this.sendBackNewPrompts();
             this.stage = "wait_responses";
         }
     }
 
-    shuffle(array: string[]) {
-        let currentIndex = array.length,  randomIndex;
-      
-        // While there remain elements to shuffle.
-        while (currentIndex != 0) {
-      
-          // Pick a remaining element.
-          randomIndex = Math.floor(Math.random() * currentIndex);
-          currentIndex--;
-      
-          // And swap it with the current element.
-          [array[currentIndex], array[randomIndex]] = [
-            array[randomIndex], array[currentIndex]];
+    cycle(array: any[], by: number) {
+        for(let i = 0; i < by;i++){
+            let k = array.shift()
+            array.push(k);
         }
-      
         return array;
-      }
+    }
       
 
 }
