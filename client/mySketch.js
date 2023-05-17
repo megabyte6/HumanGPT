@@ -8,6 +8,9 @@ let msg;
 let server;
 let players = [];
 
+server = server = new WebSocket(`ws://${window.location.host}`);
+
+
 function setup() {
   if (500 * (windowHeight / 300) < windowWidth) {
     wh = 500 * (windowHeight / 300);
@@ -16,8 +19,7 @@ function setup() {
     wh = windowWidth;
     ht = 300 * (windowWidth / 500);
   }
-	server = server = new WebSocket(`ws://${window.location.host}`);
-  cnv = createCanvas(wh, ht);
+	cnv = createCanvas(wh, ht);
   centerCanvas();
   strokeJoin(ROUND);
   textAlign(CENTER, CENTER);
