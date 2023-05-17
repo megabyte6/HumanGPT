@@ -10,6 +10,8 @@ export default class Game {
     gpt: GPT4FreeRequester
     host: Host | null
     handler: MessageHandler | null
+    prompts: string[] = [];
+    responses: string[] = [];
 
     constructor(){
         this.gpt = new GPT4FreeRequester();
@@ -41,6 +43,13 @@ export default class Game {
         let player: Player = this.players.filter(player => {return player.client === client})[0];
         this.players = this.players.filter(player => {return player.client !== client});
         this.handler?.players_update();
+    }
+
+    async tryPrompt(prompt: string){
+        this.prompts.push(prompt);
+        let response =  await this.gpt.getResponse(prompt);
+        this.responses.push(response);
+        console.log(this.prompts, this.responses);
     }
 
 }
