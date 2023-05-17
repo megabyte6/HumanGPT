@@ -126,11 +126,8 @@ function keyPressed() {
 server.onmessage = function(event) {
 	const { data } = event;
 	let message = JSON.parse(data);
-	if (message.operation == "player_join") {
-		players.push(message.arguments.name);
-	}
-	if (message.operation == "player_leave") {
-		players.splice(players.indexOf(message.arguments.name), 1);
+	if (message.operation == "players_update") {
+		players = message.arguments.players;
 	}
 }
 
