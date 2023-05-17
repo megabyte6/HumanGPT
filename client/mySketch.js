@@ -143,8 +143,8 @@ server.onmessage = function(event) {
 	if (message.operation == "start_game") {
 		startGame();
 	}
-	if (message.operation == "prompt") {
-		getData(message);
+	if (message.operation == "new_prompt") {
+		getData(message.arguments.prompt,message.arguments.response);
 	}
 }
 

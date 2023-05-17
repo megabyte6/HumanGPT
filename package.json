@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "start": "nodemon src/server.ts",
-    "startgpt": "python3 gpt_endpoint/server.py"
+    "startgpt": "python3 gpt_endpoint/server.py",
+    "fullstart": "start python gpt_endpoint/server.py && start nodemon src/server.ts"
   },
   "repository": {
     "type": "git",

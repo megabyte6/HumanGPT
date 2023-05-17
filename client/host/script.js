@@ -20,16 +20,15 @@ mywsServer.onmessage = function(event) {
     
     const { data } = event;
     let message = JSON.parse(data);
-    if(message.operation == "player_join"){
-        var node = document.createElement('li');
-        node.appendChild(document.createTextNode(message.arguments["name"]));
-        node.setAttribute("name",message.arguments["name"])
-        document.querySelector('ul').appendChild(node);
-    }
-    if(message.operation == "player_leave"){
-        var node = document.getElementsByName(message.arguments["name"])[0];
-        document.querySelector('ul').removeChild(node);
-
+    if(message.operation == "players_update"){
+        document.querySelector('ul').innerHTML=''
+        message.arguments.players.forEach(element => {
+            var node = document.createElement('li');
+            node.appendChild(document.createTextNode(element));
+            node.setAttribute("name",element)
+            document.querySelector('ul').appendChild(node);
+        });
+        
     }
     
     

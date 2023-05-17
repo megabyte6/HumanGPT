@@ -12,11 +12,13 @@ export default class Game {
     handler: MessageHandler | null
     prompts: string[] = [];
     responses: string[] = [];
+    stage: string;
 
     constructor() {
         this.gpt = new GPT4FreeRequester();
         this.host = null;
         this.handler = null;
+        this.stage = "wait_players";
     }
 
     getPlayerFromClient(client: WebSocket) {
@@ -45,11 +47,57 @@ export default class Game {
         this.handler?.players_update();
     }
 
+    start(){
+        this.stage = "wait_prompts"
+    }
+
+    sendBackNewPrompts(){
+
+        this.players.forEach((player, idx) => {
+            this.handler?.new_prompt(player, this.prompts[idx],this.responses[idx])
+
+        })
+    }
+
     async tryPrompt(prompt: string){
-        this.prompts.push(prompt);
+        if(this.stage != "wait_prompts") return;
+        
         let response =  await this.gpt.getResponse(prompt);
+        if(response == "Unable to fetch the response, Please try again."){
+            setTimeout(() => {
+                this.tryPrompt(prompt)
+            },1000);
+            return;
+
+        }
+        this.prompts.push(prompt);
         this.responses.push(response);
         console.log(this.prompts, this.responses);
+        if(this.prompts.length == this.players.length){
+            this.shuffle(this.prompts);
+            this.shuffle(this.responses);
+            this.sendBackNewPrompts();
+            this.stage = "wait_responses";
+        }
     }
+
+    shuffle(array: string[]) {
+        let currentIndex = array.length,  randomIndex;
+      
+        // While there remain elements to shuffle.
+        while (currentIndex != 0) {
+      
+          // Pick a remaining element.
+          randomIndex = Math.floor(Math.random() * currentIndex);
+          currentIndex--;
+      
+          // And swap it with the current element.
+          [array[currentIndex], array[randomIndex]] = [
+            array[randomIndex], array[currentIndex]];
+        }
+      
+        return array;
+      }
+      
 
 }
