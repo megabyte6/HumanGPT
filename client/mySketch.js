@@ -106,7 +106,7 @@ function keyPressed() {
 			inp.size(0, 0);
 			inp.position(-1000, -1000);
 			msg = {
-				operation: "",
+				operation: "init",
 				arguments: {
 					"name": name
 				}
