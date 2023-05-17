@@ -11,7 +11,7 @@ export default class Game {
     host: Host | null
     handler: MessageHandler | null
 
-    constructor(){
+    constructor() {
         this.gpt = new GPT4FreeRequester();
         this.host = null;
         this.handler = null;
@@ -25,21 +25,21 @@ export default class Game {
         return null
     }
 
-    setHandler(handler: MessageHandler){
+    setHandler(handler: MessageHandler) {
         this.handler = handler;
     }
 
-    async askAndSendGPT(prompt : string, player: Player){
+    async askAndSendGPT(prompt: string, player: Player) {
         player.client.send(await this.gpt.getResponse(prompt))
     }
 
-    playerJoin(player: Player){
+    playerJoin(player: Player) {
         this.handler?.players_update();
     }
 
     playerLeave(client: WebSocket) {
-        let player: Player = this.players.filter(player => {return player.client === client})[0];
-        this.players = this.players.filter(player => {return player.client !== client});
+        let player: Player = this.players.filter(player => { return player.client === client })[0];
+        this.players = this.players.filter(player => { return player.client !== client });
         this.handler?.players_update();
     }
 
