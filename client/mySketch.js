@@ -1,4 +1,4 @@
-let stage = 3;
+let stage = 0;
 let name = "";
 let prompt = "";
 let inp;
@@ -133,7 +133,7 @@ server.onmessage = function(event) {
 }
 
 function mousePressed() {
-	if (stage == 2) startGame();
+	//if (stage == 2) startGame();
 }
 
 function startGame() {
