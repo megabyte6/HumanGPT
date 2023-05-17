@@ -1,8 +1,9 @@
 import { WebSocket, WebSocketServer } from "ws"
 import { IncomingMessage } from "http"
+import { networkInterfaces } from "os"
+
 import Game from "./Game"
 import MessageHandler from "./MessageHandler"
-import ServerIP from "./ServerIP"
 
 import express = require("express")
 import path = require("path")
@@ -20,7 +21,6 @@ const game = new Game()
 const messageHandler: MessageHandler = new MessageHandler(websocketServer, game);
 game.setHandler(messageHandler);
 
-
 server.on("upgrade", async (request: IncomingMessage, socket: internal.Duplex, head: Buffer) => {
     websocketServer.handleUpgrade(request, socket, head, (client) => {
         let addr = request.socket.remoteAddress ?? "Anonymous"
@@ -29,9 +29,34 @@ server.on("upgrade", async (request: IncomingMessage, socket: internal.Duplex, h
         client.on("message", (message: MessageEvent) => messageHandler.handle(message, client))
     })
 })
-let ips = [];
-let ipobj = new ServerIP().getIP();
-for(const prop in ipobj){
-    ips.push(ipobj[prop]);
+
+let IPs = [];
+let IpObj = getIP();
+for (const prop in IpObj) {
+    IPs.push(IpObj[prop]);
 }
-console.log(`Connect: ${ips}:${PORT}`);
+console.log(`Connect: ${IPs}:${PORT}`);
+
+
+
+function getIP() {
+    const nets = networkInterfaces()
+    const results = Object.create(null)
+
+    for (const name of Object.keys(nets)) {
+        const netObj = nets[name] ?? []
+        for (const net of netObj) {
+            // Skip over non-IPv4 and internal (i.e. 127.0.0.1) addresses
+            // 'IPv4' is in Node <= 17, from 18 it's a number 4 or 6
+            const familyV4Value = typeof net.family === 'string' ? 'IPv4' : 4
+            if (net.family === familyV4Value && !net.internal) {
+                if (!results[name]) {
+                    results[name] = []
+                }
+                results[name].push(net.address)
+            }
+        }
+    }
+
+    return results
+}
