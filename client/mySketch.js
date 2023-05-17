@@ -54,8 +54,8 @@ function centerCanvas() {
 }
 
 function mousePressed() {
-	//if (stage == 2) startGame();
-	//if (stage == 4) getData("ways to say hello", "hello hi hey");
+	if (stage == 2) startGame();
+	if (stage == 4) getData("ways to say hello", "hello hi hey");
 }
 
 function myInputEvent() {
@@ -123,7 +123,13 @@ function keyPressed() {
 			stage = 4;
 			inp.size(0, 0);
 			inp.position(-1000, -1000);
-			//send prompt to server
+			msg = {
+				operation: "submit_prompt",
+				arguments: {
+					"prompt": prompt
+				}
+			}
+			server.send(JSON.stringify(msg));
 		}
 	}
 }
@@ -153,8 +159,10 @@ function getData(p, t) {
 	newPrompt = p;
 	writing = t.split(" ");
 	stage = 5;
+	count = 0;
 	for (let i = 0; i < writing.length; i++) {
-		words.push(new Word(25 + i*writing[i].length, 160));
+		words.push(new Word(writing[i], 125 + i*15 + count, 210));
+		count += writing[i].length;
 	}
 }
 
@@ -165,7 +173,15 @@ class Word {
 			fill(255);
 			rect(0, 0, this.sprite.width, this.sprite.height);
 			fill(0);
-			text(0, 0, t);
+			textSize(10);
+			text(t, 0, 0);
+			if (this.sprite.mouse.dragging()) {
+				this.sprite.moveTowards(
+					mouse.x,
+					mouse.y,
+					1 // full tracking
+				);
+			}
 		}
 	}
 }
