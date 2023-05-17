@@ -7,9 +7,9 @@ let writing = [];
 let msg;
 let server;
 let players = [];
+let words = [];
 
-server = server = new WebSocket(`ws://${window.location.host}`);
-
+server = new WebSocket(`ws://${window.location.host}`);
 
 function setup() {
   if (500 * (windowHeight / 300) < windowWidth) {
@@ -51,6 +51,11 @@ function centerCanvas() {
   let cx = (windowWidth - width) / 2;
   let cy = (windowHeight - height) / 2;
   cnv.position(cx, cy);
+}
+
+function mousePressed() {
+	//if (stage == 2) startGame();
+	//if (stage == 4) getData("ways to say hello", "hello hi hey");
 }
 
 function myInputEvent() {
@@ -129,10 +134,12 @@ server.onmessage = function(event) {
 	if (message.operation == "players_update") {
 		players = message.arguments.players;
 	}
-}
-
-function mousePressed() {
-	//if (stage == 2) startGame();
+	if (message.operation == "start_game") {
+		startGame();
+	}
+	if (message.operation == "prompt") {
+		getData(message);
+	}
 }
 
 function startGame() {
@@ -143,10 +150,22 @@ function startGame() {
 }
 
 function getData(p, t) {
-	newPrompt = prompt;
+	newPrompt = p;
 	writing = t.split(" ");
 	stage = 5;
 	for (let i = 0; i < writing.length; i++) {
-		createSprite(100, 100, 40, 10);
+		words.push(new Word(25 + i*writing[i].length, 160));
+	}
+}
+
+class Word {
+	constructor(t, x, y) {
+		this.sprite = createSprite(x, y, t.length*5, 10);
+		this.sprite.draw = () => {
+			fill(255);
+			rect(0, 0, this.sprite.width, this.sprite.height);
+			fill(0);
+			text(0, 0, t);
+		}
 	}
 }
