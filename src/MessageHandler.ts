@@ -87,6 +87,7 @@ export default class MessageHandler {
     //broadcast player update
     players_update(){
         let names = this.game.players.map((player)=>player.name);
+        console.log("names:", names)
         let data: Message = {
             operation: "player_join",
             arguments: {
