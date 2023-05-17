@@ -51,7 +51,8 @@ export default class MessageHandler {
     init(client: WebSocket, data: Message){
         let player: Player = new Player(client, data.arguments["name"], this.game);
         this.game.players.push(player);
-        this.game.onPlayerJoin(player);
+        this.game.playerJoin(player);
+        
         
     }
 
@@ -83,12 +84,14 @@ export default class MessageHandler {
         }
     }
 
-    //broadcast player join
-    player_join(player: Player){
+    //broadcast player update
+    players_update(){
+        let names = this.game.players.map((player)=>player.name);
+        console.log("names:", names)
         let data: Message = {
-            operation: "player_join",
+            operation: "players_update",
             arguments: {
-                "name": player.name
+                "players": names
             }
         }
         this.game.players.forEach(receiver => {
@@ -100,22 +103,7 @@ export default class MessageHandler {
         
     }
 
-    //broadcast player leave
-    player_leave(player: Player){
-        let data: Message = {
-            operation: "player_leave",
-            arguments: {
-                "name": player.name
-            }
-        }
-        this.game.players.forEach(receiver => {
-            if (receiver.client.readyState === WebSocket.OPEN)
-                receiver.client.send(JSON.stringify(data))
-        });
-        if (this.game.host?.client.readyState === WebSocket.OPEN)
-                this.game.host?.client.send(JSON.stringify(data))
-        
-    }
+    
 
 }
 
