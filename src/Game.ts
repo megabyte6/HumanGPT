@@ -33,14 +33,14 @@ export default class Game {
         player.client.send(await this.gpt.getResponse(prompt))
     }
 
-    onPlayerJoin(player: Player){
-        this.handler?.player_join(player);
+    playerJoin(player: Player){
+        this.handler?.players_update();
     }
 
     playerLeave(client: WebSocket) {
         let player: Player = this.players.filter(player => {return player.client === client})[0];
         this.players = this.players.filter(player => {return player.client !== client});
-        this.handler?.player_leave(player);
+        this.handler?.players_update();
     }
 
 }
