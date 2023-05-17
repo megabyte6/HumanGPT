@@ -2,11 +2,12 @@ import fetch from "node-fetch-commonjs"
 
 export default class GPT4FreeRequester {
 
-    async getResponse(prompt: string, chatid?: number) {
+    async getResponse(prompt: string, chatId?: number) {
         const body = {
             "request": prompt
         }
-        try{
+
+        try {
             const response = await fetch("http://127.0.0.1:8008", {
                 method: "POST",
                 body: JSON.stringify(body),
@@ -15,14 +16,11 @@ export default class GPT4FreeRequester {
             const data: any = await response.json()
 
             return data["response"]
-
-        }catch(exception){
-            console.log("GPT fetch failed, check if the endpoint is open")
+        } catch (exception) {
+            console.log("GPT fetch failed. Check if the endpoint is open and running.")
         }
-        return "Fetch Failed"
-        
 
-        
+        return "Fetch Failed"
     }
 
 }

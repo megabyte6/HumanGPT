@@ -9,9 +9,10 @@ export default class Host {
     constructor(client: WebSocket, game: Game) {
         this.client = client;
         this.game = game;
+
         console.log(`New Host created!`)
-        this.client.onclose = function(event){
-            console.log(`The Host left.`)
+        this.client.onclose = function (event) {
+            console.log(`The Host left the room.`)
             game.host = null;
         }
     }
