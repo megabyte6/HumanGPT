@@ -7,11 +7,13 @@ export default class Player {
     name: string
     score: number = 0
     game: Game
+   
 
     constructor(client: WebSocket, name: string, game: Game) {
         this.client = client;
         this.name = name;
         this.game = game;
+        
         console.log(`${name} joined the party!`)
         this.client.onclose = function(event){
             console.log(`${name} left the party.`)
