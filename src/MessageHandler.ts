@@ -37,7 +37,7 @@ export default class MessageHandler {
                 this.submit_prompt(client, data)
                 break
             default:
-                console.log(`"${data.operation}" is not a valid operation`)
+                this.game.log(`"${data.operation}" is not a valid operation`)
                 break
         }
     }
@@ -89,7 +89,6 @@ export default class MessageHandler {
             return;
 
         if (this.game.host?.client === client){
-            this.start_game()
             this.game.start()
         }
     }

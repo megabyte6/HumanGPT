@@ -10,21 +10,30 @@ import path = require("path")
 import internal = require("stream")
 
 const PORT = 8080;
+const LOAD_BOT = true;
 
 const app = express()
 app.use("/", express.static(path.resolve(__dirname, "../client")))
 app.use("/host", express.static(path.resolve(__dirname, "../client/host")))
 
 const server = app.listen(PORT, () => console.log("Listening..."))
+
+const log = function(message: string){
+    console.log(`[SERVER]: ${message}`);
+    if(LOAD_BOT){
+        bot.log(message);
+    }
+}
+
 const websocketServer = new WebSocketServer({ noServer: true })
-const game = new Game()
+const game = new Game(log)
 const messageHandler: MessageHandler = new MessageHandler(websocketServer, game);
 game.setHandler(messageHandler);
 
 server.on("upgrade", async (request: IncomingMessage, socket: internal.Duplex, head: Buffer) => {
     websocketServer.handleUpgrade(request, socket, head, (client) => {
         let addr = request.socket.remoteAddress ?? "Anonymous"
-        console.log(`Client (${addr}) connected`)
+        log(`Client (${addr}) connected`)
 
         client.on("message", (message: MessageEvent) => messageHandler.handle(message, client))
     })
@@ -59,4 +68,11 @@ function getIP() {
     }
 
     return results
+}
+
+
+let bot: any;
+if(LOAD_BOT){
+    bot = require("../discord_bot/index.js")
+    bot.setGame(game)
 }

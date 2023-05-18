@@ -14,13 +14,16 @@ export default class Player {
         this.name = name;
         this.game = game;
         
-        console.log(`${name} joined the party!`)
-        this.client.onclose = function(event){
-            console.log(`${name} left the party.`)
-            game.playerLeave(this);
+        this.game.log(`${name} joined the party!`)
+        this.client.addEventListener("close", (event)=>{
+            this.game.log(`${name} left the party.`)
+            this.game.playerLeave(this.client);
+
+        });
             
             
-        }
+            
+        
     }
 
 }

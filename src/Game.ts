@@ -13,8 +13,10 @@ export default class Game {
     prompts: string[] = [];
     responses: string[] = [];
     stage: string;
+    log: Function;
 
-    constructor() {
+    constructor(log: Function) {
+        this.log = log;
         this.gpt = new GPT4FreeRequester();
         this.host = null;
         this.handler = null;
@@ -49,11 +51,12 @@ export default class Game {
 
     start(){
         this.stage = "wait_prompts"
-        console.log("Game started, waiting for prompts...");
+        this.handler?.start_game();
+        this.log("Game started, waiting for prompts...");
     }
 
     sendBackNewPrompts(){
-        console.log("Prompts and GPT responses received, sending...");
+        this.log("Prompts and GPT responses received, sending...");
         let pindexes = this.players.map((player,idx) => idx);
         let by = Math.floor((pindexes.length-1) * Math.random()) + 1;
         pindexes = this.cycle(pindexes, by);
@@ -64,14 +67,14 @@ export default class Game {
             this.handler?.new_prompt(player, this.prompts[pindexes[idx]],this.responses[rindexes[idx]])
 
         })
-        console.log("Sent!")
+        this.log("Sent!")
         
     }
 
     async tryPrompt(prompt: string){
         if(this.stage != "wait_prompts") return;
         
-        let response =  await this.gpt.getResponse(`Reply to the following prompt, using funny vocabulary; immediately answer the question without confirming beforehand or saying "Here's an." Prompt: ${prompt}`);
+        let response =  await this.gpt.getResponse(`Reply to the following prompt in at least 30 words, using funny vocabulary; immediately answer the question without confirming beforehand or saying "Here's an." Prompt: ${prompt}`);
         if(response == "Unable to fetch the response, Please try again."){
             setTimeout(() => {
                 this.tryPrompt(prompt)

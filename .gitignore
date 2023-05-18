@@ -4,3 +4,6 @@ dist
 
 # Python virtual environment
 venv
+
+# Environment files
+.env

@@ -10,11 +10,11 @@ export default class Host {
         this.client = client;
         this.game = game;
 
-        console.log(`New Host created!`)
-        this.client.onclose = function (event) {
-            console.log(`The Host left the room.`)
-            game.host = null;
-        }
+        this.game.log(`New Host created!`)
+        this.client.addEventListener("close", (event) => {
+            this.game.log(`The Host left the room.`)
+            this.game.host = null;
+        });
     }
 
 }
