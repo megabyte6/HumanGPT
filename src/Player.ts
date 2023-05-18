@@ -7,23 +7,18 @@ export default class Player {
     name: string
     score: number = 0
     game: Game
-   
+
 
     constructor(client: WebSocket, name: string, game: Game) {
-        this.client = client;
-        this.name = name;
-        this.game = game;
-        
-        this.game.log(`${name} joined the party!`)
-        this.client.addEventListener("close", (event)=>{
-            this.game.log(`${name} left the party.`)
-            this.game.playerLeave(this.client);
+        this.client = client
+        this.name = name
+        this.game = game
 
-        });
-            
-            
-            
-        
+        this.game.log(`${name} joined the party!`)
+        this.client.addEventListener("close", (event) => {
+            this.game.log(`${name} left the party.`)
+            this.game.playerLeave(this.client)
+        })
     }
 
 }
