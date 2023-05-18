@@ -10,8 +10,6 @@ export default class Game {
     gpt: GPT4FreeRequester
     host: Host | null
     handler: MessageHandler | null
-    prompts: string[] = [];
-    responses: string[] = [];
     stage: string;
     log: Function;
 
@@ -57,34 +55,40 @@ export default class Game {
 
     sendBackNewPrompts() {
         this.log("Prompts and GPT responses received, sending...")
+
+        let prompts = this.players.map((player) => player.origPrompt);
         let promptIndexes = this.players.map((player, idx) => idx)
         let by = Math.floor((promptIndexes.length - 1) * Math.random()) + 1
         promptIndexes = this.cycle(promptIndexes, by)
+
+        let responses = this.players.map((player) => player.origResponse);
         let responseIndexes = this.players.map((player, idx) => idx)
         responseIndexes = this.cycle(responseIndexes, by - 1)
 
         this.players.forEach((player, idx) => {
-            this.handler?.new_prompt(player, this.prompts[promptIndexes[idx]], this.responses[responseIndexes[idx]])
+            this.handler?.new_prompt(player, prompts[promptIndexes[idx]] ?? `no submission`, responses[responseIndexes[idx]] ?? `no submission`)
         })
         this.log("Sent!")
 
     }
 
-    async tryPrompt(prompt: string) {
+    async tryPrompt(player: Player, prompt: string) {
         if (this.stage != "wait_prompts")
             return
 
         let response = await this.gpt.getResponse(`Reply to the following prompt in at least 30 words, using funny vocabulary; immediately answer the question without confirming beforehand or saying "Here's an." Prompt: ${prompt}`)
         if (response == "Unable to fetch the response, Please try again.") {
             setTimeout(() => {
-                this.tryPrompt(prompt)
+                this.tryPrompt(player, prompt)
             }, 1000)
             return
         }
-        this.prompts.push(prompt)
-        this.responses.push(response)
+        player.origPrompt = prompt
+        player.origResponse = response
 
-        if (this.prompts.length == this.players.length) {
+        let completeCount = this.players.filter((player)=>{return !!player.origPrompt}).length;
+
+        if (completeCount == this.players.length) {
             this.sendBackNewPrompts()
             this.stage = "wait_responses"
         }

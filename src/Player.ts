@@ -7,6 +7,10 @@ export default class Player {
     name: string
     score: number = 0
     game: Game
+    origPrompt: string|undefined
+    origResponse: string|undefined
+    newPrompt: string|undefined
+    newResponse: string|undefined
 
     constructor(client: WebSocket, name: string, game: Game) {
         this.client = client

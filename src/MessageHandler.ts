@@ -94,7 +94,11 @@ export default class MessageHandler {
 
     submit_prompt(client: WebSocket, data: Message) {
         let player = this.game.getPlayerFromClient(client)
-        this.game.tryPrompt(data.arguments.prompt)
+        if(player == null){
+            this.game.log("player for client could not be found")
+            return;
+        }
+        this.game.tryPrompt(player, data.arguments.prompt)
     }
 
     // Broadcast player update
