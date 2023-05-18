@@ -27,7 +27,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         print("Request:", body.decode("utf-8"))
         gpt_request = json.loads(body.decode("utf-8"))
         response = json.loads("{}")
-        response["response"] = gpt4free.Completion.create(Provider.You, prompt=gpt_request["request"])
+        response["response"] = gpt4free.Completion.create(Provider.You, prompt=gpt_request["request"],chat=gpt_request["chat"])
 
         self.write_response(response)
 

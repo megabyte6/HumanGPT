@@ -7,7 +7,12 @@ import { Interaction } from "discord.js";
 import Game from "../src/Game"
 
 // Create a new client instance
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({ intents: [
+	GatewayIntentBits.Guilds,
+	GatewayIntentBits.GuildMessages,
+	GatewayIntentBits.MessageContent,
+	GatewayIntentBits.GuildMembers,
+] });
 module.exports = {
     client: client,
     log: botlog,

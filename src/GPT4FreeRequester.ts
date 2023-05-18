@@ -2,9 +2,11 @@ import fetch from "node-fetch-commonjs"
 
 export default class GPT4FreeRequester {
 
-    async getResponse(prompt: string, chatId?: number) {
+    async getResponse(prompt: string, chat?: Chat[]) {
+        chat = chat ?? [];
         const body = {
-            "request": prompt
+            "request": prompt,
+            "chat": chat
         }
 
         try {
@@ -23,4 +25,9 @@ export default class GPT4FreeRequester {
         return "Fetch Failed"
     }
 
+}
+
+export interface Chat{
+    question: string,
+    answer: string
 }
