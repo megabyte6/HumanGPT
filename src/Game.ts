@@ -49,9 +49,11 @@ export default class Game {
 
     start(){
         this.stage = "wait_prompts"
+        console.log("Game started, waiting for prompts...");
     }
 
     sendBackNewPrompts(){
+        console.log("Prompts and GPT responses received, sending...");
         let pindexes = this.players.map((player,idx) => idx);
         let by = Math.floor((pindexes.length-1) * Math.random()) + 1;
         pindexes = this.cycle(pindexes, by);
@@ -62,6 +64,8 @@ export default class Game {
             this.handler?.new_prompt(player, this.prompts[pindexes[idx]],this.responses[rindexes[idx]])
 
         })
+        console.log("Sent!")
+        
     }
 
     async tryPrompt(prompt: string){

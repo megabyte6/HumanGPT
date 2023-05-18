@@ -116,7 +116,7 @@ export default class MessageHandler {
     }
 
     start_game() {
-        console.log("starting")
+        
         let data: Message = {
             operation: "start_game",
             arguments: {
