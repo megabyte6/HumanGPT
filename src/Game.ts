@@ -52,11 +52,14 @@ export default class Game {
     }
 
     sendBackNewPrompts(){
-        let indexes = this.players.map((player,idx) => idx);
-        indexes = this.cycle(indexes, Math.floor((indexes.length-1) * Math.random()) + 1);
+        let pindexes = this.players.map((player,idx) => idx);
+        let by = Math.floor((pindexes.length-1) * Math.random()) + 1;
+        pindexes = this.cycle(pindexes, by);
+        let rindexes = this.players.map((player,idx) => idx);
+        rindexes = this.cycle(rindexes, by - 1);
 
         this.players.forEach((player, idx) => {
-            this.handler?.new_prompt(player, this.prompts[indexes[idx]],this.responses[indexes[idx]])
+            this.handler?.new_prompt(player, this.prompts[pindexes[idx]],this.responses[rindexes[idx]])
 
         })
     }
@@ -64,7 +67,7 @@ export default class Game {
     async tryPrompt(prompt: string){
         if(this.stage != "wait_prompts") return;
         
-        let response =  await this.gpt.getResponse(prompt);
+        let response =  await this.gpt.getResponse(`Reply to the following prompt, using funny vocabulary; immediately answer the question without confirming beforehand or saying "Here's an." Prompt: ${prompt}`);
         if(response == "Unable to fetch the response, Please try again."){
             setTimeout(() => {
                 this.tryPrompt(prompt)
@@ -74,7 +77,7 @@ export default class Game {
         }
         this.prompts.push(prompt);
         this.responses.push(response);
-        console.log(this.prompts, this.responses);
+        
         if(this.prompts.length == this.players.length){
             this.sendBackNewPrompts();
             this.stage = "wait_responses";
