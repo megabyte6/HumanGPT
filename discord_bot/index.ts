@@ -3,6 +3,8 @@ const path = require('node:path');
 const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
 require('dotenv').config();
 const token = process.env.BOT_TOKEN;
+import { Interaction } from "discord.js";
+import Game from "../src/Game"
 
 // Create a new client instance
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
@@ -19,7 +21,7 @@ const commandFolders = fs.readdirSync(foldersPath);
 
 for (const folder of commandFolders) {
 	const commandsPath = path.join(foldersPath, folder);
-	const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+	const commandFiles = fs.readdirSync(commandsPath).filter((file:any) => file.endsWith('.ts'));
 	for (const file of commandFiles) {
 		const filePath = path.join(commandsPath, file);
 		const command = require(filePath);
@@ -33,11 +35,11 @@ for (const folder of commandFolders) {
 }
 // When the client is ready, run this code (only once)
 // We use 'c' for the event parameter to keep it separate from the already defined 'client'
-client.once(Events.ClientReady, c => {
+client.once(Events.ClientReady, (c: any) => {
 	console.log("[BOT]: ",`Ready! Logged in as ${c.user.tag}`);
 });
 
-client.on(Events.InteractionCreate, async interaction => {
+client.on(Events.InteractionCreate, async (interaction:any) => {
 	if (!interaction.isChatInputCommand()) return;
 
 	const command = interaction.client.commands.get(interaction.commandName);
@@ -62,7 +64,7 @@ client.on(Events.InteractionCreate, async interaction => {
 // Log in to Discord with your client's token
 client.login(token);
 
-async function botlog(message){
+async function botlog(message: string){
     try{
         const channel = await client.channels.cache.get('1108579839524491294');
         await channel.send(message);
@@ -73,7 +75,7 @@ async function botlog(message){
     }
     
 }
-function setGame(_game){
+function setGame(_game: Game){
     client.game = _game;
 }
 

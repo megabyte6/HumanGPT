@@ -73,6 +73,6 @@ function getIP() {
 
 let bot: any;
 if(LOAD_BOT){
-    bot = require("../discord_bot/index.js")
+    bot = require("../discord_bot/index.ts")
     bot.setGame(game)
 }
