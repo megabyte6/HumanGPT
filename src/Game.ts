@@ -17,7 +17,7 @@ export default class Game {
 
     constructor(log: Function) {
         this.log = log;
-        this.gpt = new GPT4FreeRequester();
+        this.gpt = new GPT4FreeRequester()
         this.host = null;
         this.handler = null;
         this.stage = "wait_players";
@@ -32,7 +32,7 @@ export default class Game {
     }
 
     setHandler(handler: MessageHandler) {
-        this.handler = handler;
+        this.handler = handler
     }
 
     async askAndSendGPT(prompt: string, player: Player) {
@@ -40,64 +40,62 @@ export default class Game {
     }
 
     playerJoin(player: Player) {
-        this.handler?.players_update();
+        this.handler?.players_update()
     }
 
     playerLeave(client: WebSocket) {
-        let player: Player = this.players.filter(player => { return player.client === client })[0];
-        this.players = this.players.filter(player => { return player.client !== client });
-        this.handler?.players_update();
+        let player: Player = this.players.filter(player => { return player.client === client })[0]
+        this.players = this.players.filter(player => { return player.client !== client })
+        this.handler?.players_update()
     }
 
-    start(){
+    start() {
         this.stage = "wait_prompts"
-        this.handler?.start_game();
-        this.log("Game started, waiting for prompts...");
+        this.handler?.start_game()
+        this.log("Game started, waiting for prompts...")
     }
 
-    sendBackNewPrompts(){
-        this.log("Prompts and GPT responses received, sending...");
-        let pindexes = this.players.map((player,idx) => idx);
-        let by = Math.floor((pindexes.length-1) * Math.random()) + 1;
-        pindexes = this.cycle(pindexes, by);
-        let rindexes = this.players.map((player,idx) => idx);
-        rindexes = this.cycle(rindexes, by - 1);
+    sendBackNewPrompts() {
+        this.log("Prompts and GPT responses received, sending...")
+        let promptIndexes = this.players.map((player, idx) => idx)
+        let by = Math.floor((promptIndexes.length - 1) * Math.random()) + 1
+        promptIndexes = this.cycle(promptIndexes, by)
+        let responseIndexes = this.players.map((player, idx) => idx)
+        responseIndexes = this.cycle(responseIndexes, by - 1)
 
         this.players.forEach((player, idx) => {
-            this.handler?.new_prompt(player, this.prompts[pindexes[idx]],this.responses[rindexes[idx]])
-
+            this.handler?.new_prompt(player, this.prompts[promptIndexes[idx]], this.responses[responseIndexes[idx]])
         })
         this.log("Sent!")
-        
+
     }
 
-    async tryPrompt(prompt: string){
-        if(this.stage != "wait_prompts") return;
-        
-        let response =  await this.gpt.getResponse(`Reply to the following prompt in at least 30 words, using funny vocabulary; immediately answer the question without confirming beforehand or saying "Here's an." Prompt: ${prompt}`);
-        if(response == "Unable to fetch the response, Please try again."){
+    async tryPrompt(prompt: string) {
+        if (this.stage != "wait_prompts")
+            return
+
+        let response = await this.gpt.getResponse(`Reply to the following prompt in at least 30 words, using funny vocabulary; immediately answer the question without confirming beforehand or saying "Here's an." Prompt: ${prompt}`)
+        if (response == "Unable to fetch the response, Please try again.") {
             setTimeout(() => {
                 this.tryPrompt(prompt)
-            },1000);
-            return;
-
+            }, 1000)
+            return
         }
-        this.prompts.push(prompt);
-        this.responses.push(response);
-        
-        if(this.prompts.length == this.players.length){
-            this.sendBackNewPrompts();
-            this.stage = "wait_responses";
+        this.prompts.push(prompt)
+        this.responses.push(response)
+
+        if (this.prompts.length == this.players.length) {
+            this.sendBackNewPrompts()
+            this.stage = "wait_responses"
         }
     }
 
     cycle(array: any[], by: number) {
-        for(let i = 0; i < by;i++){
+        for (let i = 0; i < by; i++) {
             let k = array.shift()
-            array.push(k);
+            array.push(k)
         }
-        return array;
+        return array
     }
-      
 
 }

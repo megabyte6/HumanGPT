@@ -85,22 +85,19 @@ export default class MessageHandler {
 
     //host triggers the game start
     trigger_start(client: WebSocket, data: Message) {
-        if(this.game.stage != "wait_players") 
-            return;
+        if (this.game.stage != "wait_players")
+            return
 
-        if (this.game.host?.client === client){
+        if (this.game.host?.client === client)
             this.game.start()
-        }
     }
 
     submit_prompt(client: WebSocket, data: Message) {
-        let player = this.game.getPlayerFromClient(client);
-        this.game.tryPrompt(data.arguments.prompt);
+        let player = this.game.getPlayerFromClient(client)
+        this.game.tryPrompt(data.arguments.prompt)
     }
 
-
-
-    //broadcast player update
+    // Broadcast player update
     players_update() {
         let names = this.game.players.map((player) => player.name)
         let data: Message = {
@@ -111,11 +108,9 @@ export default class MessageHandler {
         }
 
         this.broadcast(data)
-
     }
 
     start_game() {
-        
         let data: Message = {
             operation: "start_game",
             arguments: {
@@ -124,10 +119,10 @@ export default class MessageHandler {
         }
 
         this.broadcast(data)
-
     }
-    //send a client their new prompt + response
-    new_prompt(player: Player, prompt: string, response: string){
+
+    // Send a client their new prompt + response
+    new_prompt(player: Player, prompt: string, response: string) {
         let data: Message = {
             operation: "new_prompt",
             arguments: {
@@ -135,11 +130,8 @@ export default class MessageHandler {
                 response: response
             }
         }
-        player.client.send(JSON.stringify(data));
-
+        player.client.send(JSON.stringify(data))
     }
-
-
 
 }
 

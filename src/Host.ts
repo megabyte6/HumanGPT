@@ -13,8 +13,8 @@ export default class Host {
         this.game.log(`New Host created!`)
         this.client.addEventListener("close", (event) => {
             this.game.log(`The Host left the room.`)
-            this.game.host = null;
-        });
+            this.game.host = null
+        })
     }
 
 }

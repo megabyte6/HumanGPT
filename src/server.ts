@@ -9,8 +9,8 @@ import express = require("express")
 import path = require("path")
 import internal = require("stream")
 
-const PORT = 8080;
-const LOAD_BOT = true;
+const PORT = 8080
+const LOAD_BOT = true
 
 const app = express()
 app.use("/", express.static(path.resolve(__dirname, "../client")))
@@ -18,17 +18,16 @@ app.use("/host", express.static(path.resolve(__dirname, "../client/host")))
 
 const server = app.listen(PORT, () => console.log("Listening..."))
 
-const log = function(message: string){
-    console.log(`[SERVER]: ${message}`);
-    if(LOAD_BOT){
-        bot.log(message);
-    }
+const log = function (message: string) {
+    console.log(`[SERVER]: ${message}`)
+    if (LOAD_BOT)
+        bot.log(message)
 }
 
 const websocketServer = new WebSocketServer({ noServer: true })
 const game = new Game(log)
-const messageHandler: MessageHandler = new MessageHandler(websocketServer, game);
-game.setHandler(messageHandler);
+const messageHandler: MessageHandler = new MessageHandler(websocketServer, game)
+game.setHandler(messageHandler)
 
 server.on("upgrade", async (request: IncomingMessage, socket: internal.Duplex, head: Buffer) => {
     websocketServer.handleUpgrade(request, socket, head, (client) => {
@@ -39,12 +38,18 @@ server.on("upgrade", async (request: IncomingMessage, socket: internal.Duplex, h
     })
 })
 
-let IPs = [];
-let IpObj = getIP();
+let IPs = []
+let IpObj = getIP()
 for (const prop in IpObj) {
-    IPs.push(IpObj[prop]);
+    IPs.push(IpObj[prop])
 }
-console.log(`Connect: ${IPs}:${PORT}`);
+console.log(`Connect: ${IPs}:${PORT}`)
+
+let bot: any
+if (LOAD_BOT) {
+    bot = require("../discord_bot/index.js")
+    bot.setGame(game)
+}
 
 
 
