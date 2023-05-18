@@ -8,7 +8,6 @@ export default class Player {
     score: number = 0
     game: Game
 
-
     constructor(client: WebSocket, name: string, game: Game) {
         this.client = client
         this.name = name
