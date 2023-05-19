@@ -26,7 +26,7 @@ module.exports = {
 			players.forEach((player:Player)=>{
 				playersEmbed.addFields({
 					name: player.name,
-					value: ` • Submitted prompt: \`${player.origPrompt}\`\n • Response: \`${player.origResponse}\`\n • New prompt: \`${player.newPrompt}\`\n • Response to rearrange: \`${player.newResponse}\``
+					value: ` • Submitted prompt: \`${player.origPrompt}\`\n\n • Response: \`${player.origResponse}\`\n\n • New prompt: \`${player.newPrompt}\`\n\n • Response to rearrange: \`${player.newResponse}\``
 
 				})
 
