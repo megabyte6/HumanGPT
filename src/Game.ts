@@ -66,7 +66,9 @@ export default class Game {
         responseIndexes = this.cycle(responseIndexes, by - 1)
 
         this.players.forEach((player, idx) => {
-            this.handler?.new_prompt(player, prompts[promptIndexes[idx]] ?? `no submission`, responses[responseIndexes[idx]] ?? `no submission`)
+            player.newPrompt = prompts[promptIndexes[idx]] ?? `no submission`
+            player.newResponse = responses[responseIndexes[idx]] ?? `no submission`
+            this.handler?.new_prompt(player, player.newPrompt,player.newResponse)
         })
         this.log("Sent!")
 

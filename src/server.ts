@@ -44,6 +44,7 @@ for (const prop in IpObj) {
     IPs.push(IpObj[prop])
 }
 console.log(`Connect: ${IPs}:${PORT}`)
+process.env.GAME_IP = `${IPs}:${PORT}`;
 
 let bot: any
 if (LOAD_BOT) {
