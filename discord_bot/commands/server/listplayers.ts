@@ -12,16 +12,16 @@ module.exports = {
 		if(interaction.member.roles.cache.has('1108605466436710460')){
 			const playersEmbed = new EmbedBuilder()
 				.setColor(0x0099FF)
-				.setTitle('Players (click to join the game)')
-				.setURL(`http://${process.env.GAME_IP}`)
+				.setTitle('Players')
 				.setTimestamp()
 			.setFooter({ text: `Requested by ${interaction.user.tag}`, iconURL: interaction.user.avatarURL()});
 
 		
 			let game: Game = interaction.client.game;
 			let players: Player[] = game.players;
+			playersEmbed.setDescription(`[Click to join the game!](http://${process.env.GAME_IP})`)
 			if(players.length == 0){
-				playersEmbed.setDescription("No players currently in game")
+				playersEmbed.setDescription(`No players currently in game \n [Click to join the game!](http://${process.env.GAME_IP})`)
 			}
 			players.forEach((player:Player)=>{
 				playersEmbed.addFields({
