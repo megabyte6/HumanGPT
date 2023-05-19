@@ -36,7 +36,7 @@ module.exports = {
             })
 
             collector.on("end", ()=>{
-                console.log("collector stopped");
+                
             })
 			
 		}
