@@ -2,6 +2,7 @@ import { WebSocket, WebSocketServer } from "ws"
 import Game from "./Game"
 import Player from "./Player"
 import Host from "./Host"
+import LogTypes from "./LogTypes"
 
 export default class MessageHandler {
 
@@ -37,7 +38,7 @@ export default class MessageHandler {
                 this.submit_prompt(client, data)
                 break
             default:
-                this.game.log(`"${data.operation}" is not a valid operation`)
+                this.game.log(`"${data.operation}" is not a valid operation`, LogTypes.warning)
                 break
         }
     }
@@ -95,7 +96,7 @@ export default class MessageHandler {
     submit_prompt(client: WebSocket, data: Message) {
         let player = this.game.getPlayerFromClient(client)
         if(player == null){
-            this.game.log("player for client could not be found")
+            this.game.log("Player for client could not be found", LogTypes.warning)
             return;
         }
         this.game.tryPrompt(player, data.arguments.prompt)

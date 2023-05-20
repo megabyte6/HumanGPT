@@ -3,8 +3,9 @@ const path = require('node:path');
 const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
 require('dotenv').config();
 const token = process.env.BOT_TOKEN;
-import { codeBlock, EmbedBuilder, Interaction, Message } from "discord.js";
+import { bold, codeBlock, EmbedBuilder, Interaction, Message } from "discord.js";
 import Game from "../src/Game"
+import { LogType } from "../src/LogTypes";
 import UserPermissions from "./UserPermissions";
 
 // Create a new client instance
@@ -70,12 +71,16 @@ client.on(Events.InteractionCreate, async (interaction:any) => {
 // Log in to Discord with your client's token
 client.login(token);
 
-async function botlog(message: string){
+async function botlog(message: string, color?: LogType){
     try{
         const channel = await client.channels.cache.get('1108579839524491294');
-        await channel.send(message);
+		let embed = new EmbedBuilder();
+		embed.setColor(color?.embedColor ?? "Blurple");
+		embed.setDescription(bold(message));
+        await channel.send({embeds: [embed]});
 
     }catch(error){
+		console.log(error)
         console.log("[BOT]:","could not send message")
 
     }

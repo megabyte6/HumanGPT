@@ -8,6 +8,8 @@ import MessageHandler from "./MessageHandler"
 import express = require("express")
 import path = require("path")
 import internal = require("stream")
+import chalk  = require("chalk")
+import { LogType } from "./LogTypes"
 
 const PORT = 8080
 const LOAD_BOT = true
@@ -16,12 +18,17 @@ const app = express()
 app.use("/", express.static(path.resolve(__dirname, "../client")))
 app.use("/host", express.static(path.resolve(__dirname, "../client/host")))
 
-const server = app.listen(PORT, () => console.log("Listening..."))
+const server = app.listen(PORT, () => console.log(chalk.greenBright("Listening...")))
 
-const log = function (message: string) {
-    console.log(`[SERVER]: ${message}`)
+const log = function (message: string, color? : LogType) {
+    if(!color) {
+        console.log(`[SERVER]: ${message}`);
+    }
+    else{
+        console.log(`[SERVER]: ${color.chalkColor(message)}`)
+    }
     if (LOAD_BOT)
-        bot.log(message)
+        bot.log(message, color)
 }
 
 const websocketServer = new WebSocketServer({ noServer: true })
@@ -43,7 +50,7 @@ let IpObj = getIP()
 for (const prop in IpObj) {
     IPs.push(IpObj[prop])
 }
-console.log(`Connect: ${IPs}:${PORT}`)
+console.log(chalk.magentaBright(`Connect: ${IPs}:${PORT}`))
 process.env.GAME_IP = `${IPs}:${PORT}`;
 
 let bot: any

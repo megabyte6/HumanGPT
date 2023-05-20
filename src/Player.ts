@@ -1,5 +1,6 @@
 import { WebSocket } from "ws"
 import Game from "./Game"
+import LogTypes from "./LogTypes"
 
 export default class Player {
 
@@ -17,9 +18,9 @@ export default class Player {
         this.name = name
         this.game = game
 
-        this.game.log(`${name} joined the party!`)
+        this.game.log(`${name} joined the party!`, LogTypes.join)
         this.client.addEventListener("close", (event) => {
-            this.game.log(`${name} left the party.`)
+            this.game.log(`${name} left the party.`, LogTypes.leave)
             this.game.playerLeave(this.client)
         })
     }

@@ -3,6 +3,7 @@ import Host from "./Host"
 import { WebSocket } from "ws"
 import GPT4FreeRequester from "./GPT4FreeRequester"
 import MessageHandler from "./MessageHandler"
+import LogTypes from "./LogTypes"
 
 export default class Game {
 
@@ -50,11 +51,11 @@ export default class Game {
     start() {
         this.stage = "wait_prompts"
         this.handler?.start_game()
-        this.log("Game started, waiting for prompts...")
+        this.log("Game started, waiting for prompts...", LogTypes.gameProgress)
     }
 
     sendBackNewPrompts() {
-        this.log("Prompts and GPT responses received, sending...")
+        this.log("Prompts and GPT responses received, sending...", LogTypes.gameProgress)
 
         let prompts = this.players.map((player) => player.origPrompt);
         let promptIndexes = this.players.map((player, idx) => idx)
@@ -70,7 +71,7 @@ export default class Game {
             player.newResponse = responses[responseIndexes[idx]] ?? `no submission`
             this.handler?.new_prompt(player, player.newPrompt,player.newResponse)
         })
-        this.log("Sent!")
+        this.log("Sent!", LogTypes.gameProgress)
 
     }
 

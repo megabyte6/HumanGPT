@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
+import { SlashCommandBuilder, EmbedBuilder, inlineCode } from 'discord.js';
 import Game from '../../../src/Game';
 import Player from '../../../src/Player';
 import UserPermissions from '../../UserPermissions';
@@ -27,7 +27,10 @@ module.exports = {
 			players.forEach((player:Player)=>{
 				playersEmbed.addFields({
 					name: player.name,
-					value: ` • Submitted prompt: \`${player.origPrompt}\`\n\n • Response: \`${player.origResponse}\`\n\n • New prompt: \`${player.newPrompt}\`\n\n • Response to rearrange: \`${player.newResponse}\``
+					value: ` ${player.origPrompt ? `• Submitted prompt: \n${inlineCode(player.origPrompt)}` : ""} 
+					${player.origResponse ? `• Response: \n${inlineCode(player.origResponse)}` : ""}
+					${player.newPrompt ? `• New prompt: \n${inlineCode(player.newPrompt)}` : ""}
+					${player.newResponse ? `• Response to rearrange: \n${inlineCode(player.newResponse)}` : ""}`
 
 				})
 

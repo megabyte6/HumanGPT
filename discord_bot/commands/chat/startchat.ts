@@ -31,7 +31,7 @@ module.exports = {
                     return;
                 }
                 let response = await interaction.client.game.gpt.getResponse(message.content,chat);
-                chat.push({question: message.content, answer: response});
+                if(response != "Unable to fetch the response, Please try again." && response != "Fetch Failed") chat.push({question: message.content, answer: response});
                 await message.reply(response);
 
             })

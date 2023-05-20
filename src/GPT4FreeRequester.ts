@@ -1,4 +1,5 @@
 import fetch from "node-fetch-commonjs"
+import LogTypes from "./LogTypes";
 
 export default class GPT4FreeRequester {
 
@@ -19,7 +20,7 @@ export default class GPT4FreeRequester {
 
             return data["response"]
         } catch (exception) {
-            console.log("[GPT]","GPT fetch failed. Check if the endpoint is open and running.")
+            console.log("[GPT]:",LogTypes.warning.chalkColor("GPT fetch failed. Check if the endpoint is open and running."))
         }
 
         return "Fetch Failed"
