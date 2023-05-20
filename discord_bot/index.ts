@@ -106,6 +106,14 @@ client.on("messageCreate", async (message: Message) => {
 			)
 			embed.setFooter({ text: `Requested by ${message.author.tag}`, iconURL: message.author.avatarURL() ?? undefined})
 			await message.channel.send({ embeds: [embed] });
+		}else{
+			let embed = new EmbedBuilder();
+			embed.setColor(0xFF2222)
+			embed.setTitle("Eval Denied")
+			embed.setDescription("Only devs may use this command.")
+			embed.setFooter({ text: `Requested by ${message.author.tag}`, iconURL: message.author.avatarURL() ?? undefined})
+			await message.channel.send({ embeds: [embed] });
+
 		}
 
 	}
