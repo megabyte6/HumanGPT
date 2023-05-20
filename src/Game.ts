@@ -105,7 +105,13 @@ export default class Game {
     }
 
     async eval(code: string){
-        return await eval(code);
+        try{
+            return await eval(code);
+
+        }catch(error){
+            return error;
+        }
+        
 
     }
 
