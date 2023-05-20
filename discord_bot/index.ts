@@ -3,8 +3,9 @@ const path = require('node:path');
 const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
 require('dotenv').config();
 const token = process.env.BOT_TOKEN;
-import { Interaction } from "discord.js";
+import { codeBlock, EmbedBuilder, Interaction, Message } from "discord.js";
 import Game from "../src/Game"
+import UserPermissions from "./UserPermissions";
 
 // Create a new client instance
 const client = new Client({ intents: [
@@ -83,4 +84,31 @@ async function botlog(message: string){
 function setGame(_game: Game){
     client.game = _game;
 }
+
+client.on("messageCreate", async (message: Message) => {
+
+	if(message.author.bot) return;
+	if(message.content.startsWith("!eval")){
+		if(UserPermissions.isDev(message.author)){
+			
+			let args = message.content.substring(6);
+			await message.channel.sendTyping();
+			let result = await client.game.eval(args);
+			if(result === ''){
+				result = '\'\''
+			}
+			let embed = new EmbedBuilder();
+			embed.setColor(0x00FF99)
+			embed.setTitle("Eval")
+			embed.addFields(
+				{name: "Input", value: codeBlock('js', args)},
+				{name: "Output", value: codeBlock('js', `${result}`)},
+			)
+			embed.setFooter({ text: `Requested by ${message.author.tag}`, iconURL: message.author.avatarURL() ?? undefined})
+			await message.channel.send({ embeds: [embed] });
+		}
+
+	}
+
+})
 

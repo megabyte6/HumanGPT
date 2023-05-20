@@ -19,7 +19,7 @@ export default class GPT4FreeRequester {
 
             return data["response"]
         } catch (exception) {
-            console.log("GPT fetch failed. Check if the endpoint is open and running.")
+            console.log("[GPT]","GPT fetch failed. Check if the endpoint is open and running.")
         }
 
         return "Fetch Failed"

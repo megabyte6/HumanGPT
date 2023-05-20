@@ -1,5 +1,6 @@
 import { BaseInteraction, CommandInteraction, Message, MessageCollector, SlashCommandBuilder } from 'discord.js';
 import { Chat } from '../../../src/GPT4FreeRequester';
+import UserPermissions from '../../UserPermissions';
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -13,7 +14,7 @@ module.exports = {
 	async execute(interaction: any) {
         const reason = interaction.options.getString('prompt') ?? 'No prompt provided';
         const sent = await interaction.reply({ content: 'Starting...', fetchReply: true });
-        if(interaction.member.roles.cache.has('1108605466436710460')){
+        if(UserPermissions.isDev(interaction.member)){
             let prompt = interaction.options.getString('prompt');
             let response = await interaction.client.game.gpt.getResponse(prompt);
 		    await interaction.editReply(response);
@@ -24,7 +25,7 @@ module.exports = {
             collector.on('collect', async (message: Message)=>{
                 if(message.author.bot) return;
                 
-                if(message.content == "!stop" && message.member?.roles.cache.has('1108605466436710460')){
+                if(message.content == "!stop" && UserPermissions.isDev(message.member)){
                     collector.stop("dev stopped")
                     await message.reply("Chat stopped.");
                     return;

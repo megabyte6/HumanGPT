@@ -1,4 +1,5 @@
 import { SlashCommandBuilder } from 'discord.js';
+import UserPermissions from '../../UserPermissions';
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -6,7 +7,7 @@ module.exports = {
 		.setDescription('Starts the current game'),
 	async execute(interaction: any) {
 		const sent = await interaction.reply({ content: 'Starting...', fetchReply: true });
-		if(interaction.member.roles.cache.has('1108605466436710460')){
+		if(UserPermissions.isDev(interaction.member)){
 			interaction.client.game.start();
 			await interaction.editReply(`Game has started!`);
 		}

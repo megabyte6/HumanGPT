@@ -104,4 +104,9 @@ export default class Game {
         return array
     }
 
+    async eval(code: string){
+        return await eval(code);
+
+    }
+
 }

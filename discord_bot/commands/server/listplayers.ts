@@ -1,6 +1,7 @@
 import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import Game from '../../../src/Game';
 import Player from '../../../src/Player';
+import UserPermissions from '../../UserPermissions';
 
 
 module.exports = {
@@ -9,7 +10,7 @@ module.exports = {
 		.setDescription('Lists all players in the game'),
 	async execute(interaction: any) {
 		const sent = await interaction.reply({ content: 'Fetching...', fetchReply: true });
-		if(interaction.member.roles.cache.has('1108605466436710460')){
+		if(UserPermissions.isDev(interaction.member)){
 			const playersEmbed = new EmbedBuilder()
 				.setColor(0x0099FF)
 				.setTitle('Players')
