@@ -185,7 +185,7 @@ class Word {
 			rect(0, 0, this.sprite.width, this.sprite.height);
 			fill(0);
 			textSize(8);
-			text(t, 0, 1);
+			text(t, 0, -0.5);
 			if (this.sprite.mouse.pressing()) {
 				this.sprite.x = mouse.x;
 				this.sprite.y = mouse.y;
