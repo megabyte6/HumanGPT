@@ -169,7 +169,7 @@ function getData(p, t) {
 	line = 0;
 	for (let i = 0; i < writing.length; i++) {
 		words.push(new Word(writing[i], 50 + count + writing[i].length*3, 250 + line*15));
-		count += words[i].sprite.width + 3;
+		count += words[i].sprite.width*1.17;
 		if (words[i].sprite.x > 450) {
 			line++;
 			count = 0;
