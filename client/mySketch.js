@@ -43,7 +43,7 @@ function setup() {
 }
 
 function preload() {
-	fontt = loadFont("https://fonts.googleapis.com/css2?family=Ubuntu+Mono:wght@700&display=swap");
+	fontt = loadFont("UbuntuMono-Bold.ttf");
 }
 
 function startText() {
