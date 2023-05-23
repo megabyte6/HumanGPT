@@ -83,7 +83,7 @@ export default class Game {
         if (this.stage != "wait_prompts")
             return
 
-        let response = await this.gpt.getResponse(`Reply to the following prompt in at least 30 words, using weird vocabulary; immediately answer the question without confirming beforehand or saying "Here's an." Prompt: ${prompt}`)
+        let response = await this.gpt.getResponse(`Reply to the following prompt in at least 30 words, using funny vocabulary; immediately answer the question without confirming beforehand or saying "Here's an." Prompt: ${prompt}`)
         if (response == "Unable to fetch the response, Please try again.") {
             setTimeout(() => {
                 this.tryPrompt(player, prompt)
