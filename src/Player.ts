@@ -12,6 +12,7 @@ export default class Player {
     origResponse: string|undefined
     newPrompt: string|undefined
     newResponse: string|undefined
+    rearrangedResponse: string|undefined
 
     constructor(client: WebSocket, name: string, game: Game) {
         this.client = client

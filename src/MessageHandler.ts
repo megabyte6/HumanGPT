@@ -37,6 +37,9 @@ export default class MessageHandler {
             case "submit_prompt":
                 this.submit_prompt(client, data)
                 break
+            case "submit_response":
+                this.submit_response(client, data)
+                break
             default:
                 this.game.log(`"${data.operation}" is not a valid operation`, LogTypes.warning)
                 break
@@ -99,6 +102,15 @@ export default class MessageHandler {
             return;
         }
         this.game.tryPrompt(player, data.arguments.prompt)
+    }
+
+    submit_response(client: WebSocket, data: Message) {
+        let player = this.game.getPlayerFromClient(client)
+        if(player == null){
+            this.game.log("Player for client could not be found", LogTypes.warning)
+            return;
+        }
+        this.game.submitResponse(player, data.arguments.response)
     }
 
     // Broadcast player update
