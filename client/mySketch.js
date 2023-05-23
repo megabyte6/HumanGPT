@@ -168,7 +168,7 @@ function getData(p, t) {
 	count = 0;
 	line = 0;
 	for (let i = 0; i < writing.length; i++) {
-		words.push(new Word(writing[i], 50 + count + writing[i].length*3, 100 + line*15));
+		words.push(new Word(writing[i], 50 + count + writing[i].length*3, 250 + line*15));
 		count += words[i].sprite.width;
 		if (words[i].sprite.x > 450) {
 			line++;
@@ -179,7 +179,7 @@ function getData(p, t) {
 
 class Word {
 	constructor(t, x, y) {
-		this.sprite = createSprite(x, y, t.length*4, 10, "kinematic");
+		this.sprite = createSprite(x, y, t.length*5, 10, "kinematic");
 		this.sprite.draw = () => {
 			fill(255);
 			rect(0, 0, this.sprite.width, this.sprite.height);
