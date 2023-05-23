@@ -54,8 +54,8 @@ function centerCanvas() {
 }
 
 function mousePressed() {
-	if (stage == 2) startGame();
-	if (stage == 4) getData("ways to say hello", "hello hi hey");
+	//if (stage == 2) startGame();
+	//if (stage == 4) getData("ways to say hello", "hello hi hey");
 }
 
 function myInputEvent() {
@@ -168,7 +168,7 @@ function getData(p, t) {
 
 class Word {
 	constructor(t, x, y) {
-		this.sprite = createSprite(x, y, t.length*5, 10);
+		this.sprite = createSprite(x, y, t.length*5, 10, "kinematic");
 		this.sprite.draw = () => {
 			fill(255);
 			rect(0, 0, this.sprite.width, this.sprite.height);
@@ -176,11 +176,8 @@ class Word {
 			textSize(10);
 			text(t, 0, 0);
 			if (this.sprite.mouse.dragging()) {
-				this.sprite.moveTowards(
-					mouse.x,
-					mouse.y,
-					1 // full tracking
-				);
+				this.sprite.x = mouse.x;
+				this.sprite.y = mouse.y;
 			}
 		}
 	}
