@@ -60,8 +60,8 @@ function centerCanvas() {
 }
 
 function mousePressed() {
-	if (stage == 2) startGame();
-	if (stage == 4) getData("ways to say hello", "hello hi hey");
+	//if (stage == 2) startGame();
+	//if (stage == 4) getData("ways to say hello", "hello hi hey");
 }
 
 function myInputEvent() {
