@@ -8,6 +8,7 @@ let msg;
 let server;
 let players = [];
 let words = [];
+let fontt;
 
 server = new WebSocket(`ws://${window.location.host}`);
 
@@ -22,6 +23,7 @@ function setup() {
 	cnv = createCanvas(wh, ht);
   centerCanvas();
   strokeJoin(ROUND);
+  textFont(fontt);
   textAlign(CENTER, CENTER);
   startButton = createSprite(250, 200, 100, 35);
   startButton.draw = () => {
@@ -40,6 +42,10 @@ function setup() {
   };
 }
 
+function preload() {
+	fontt = loadFont("https://fonts.googleapis.com/css2?family=Ubuntu+Mono:wght@700&display=swap");
+}
+
 function startText() {
   inp = createInput("");
   inp.position(windowWidth / 2 - 150, windowHeight / 2 - 20);
@@ -54,8 +60,8 @@ function centerCanvas() {
 }
 
 function mousePressed() {
-	//if (stage == 2) startGame();
-	//if (stage == 4) getData("ways to say hello", "hello hi hey");
+	if (stage == 2) startGame();
+	if (stage == 4) getData("ways to say hello", "hello hi hey");
 }
 
 function myInputEvent() {
@@ -160,22 +166,27 @@ function getData(p, t) {
 	writing = t.split(" ");
 	stage = 5;
 	count = 0;
+	line = 0;
 	for (let i = 0; i < writing.length; i++) {
-		words.push(new Word(writing[i], 125 + i*15 + count, 210));
-		count += writing[i].length;
+		words.push(new Word(writing[i], 50 + count + writing[i].length*3, 100 + line*15));
+		count += words[i].sprite.width;
+		if (words[i].sprite.x > 450) {
+			line++;
+			count = 0;
+		}
 	}
 }
 
 class Word {
 	constructor(t, x, y) {
-		this.sprite = createSprite(x, y, t.length*5, 10, "kinematic");
+		this.sprite = createSprite(x, y, t.length*6, 10, "kinematic");
 		this.sprite.draw = () => {
 			fill(255);
 			rect(0, 0, this.sprite.width, this.sprite.height);
 			fill(0);
-			textSize(10);
-			text(t, 0, 0);
-			if (this.sprite.mouse.dragging()) {
+			textSize(8);
+			text(t, 0, 1);
+			if (this.sprite.mouse.pressing()) {
 				this.sprite.x = mouse.x;
 				this.sprite.y = mouse.y;
 			}
