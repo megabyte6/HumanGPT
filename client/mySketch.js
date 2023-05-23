@@ -105,7 +105,7 @@ function draw() {
 	if (stage == 5) {
     noStroke();
     fill(50, 168, 109);
-    text("Write a paragraph about " + newPrompt, 250, 150);
+    text(newPrompt, 250, 40);
   }
   pop();
 }
@@ -179,7 +179,7 @@ function getData(p, t) {
 
 class Word {
 	constructor(t, x, y) {
-		this.sprite = createSprite(x, y, t.length*6, 10, "kinematic");
+		this.sprite = createSprite(x, y, t.length*4, 10, "kinematic");
 		this.sprite.draw = () => {
 			fill(255);
 			rect(0, 0, this.sprite.width, this.sprite.height);
