@@ -33,7 +33,7 @@ function setup() {
     rect(0, 0, startButton.width, startButton.height, 5, 5);
     noStroke();
     fill(0);
-    text("Start", 0, 3);
+    text("Start", 0, 0);
     if (startButton.mouse.pressed()) {
       stage = 1;
       startText();
