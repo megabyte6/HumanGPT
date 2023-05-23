@@ -55,7 +55,6 @@ export default class MessageHandler {
     //initializes a new Player
     init(client: WebSocket, data: Message) {
         let player: Player = new Player(client, data.arguments["name"], this.game)
-        this.game.players.push(player)
         this.game.playerJoin(player)
     }
 

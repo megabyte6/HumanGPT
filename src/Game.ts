@@ -39,7 +39,11 @@ export default class Game {
     }
 
     playerJoin(player: Player) {
-        this.handler?.players_update()
+        this.players.push(player);
+        if(this.stage == "wait_players"){
+            this.handler?.players_update()
+        }
+        
     }
 
     playerLeave(client: WebSocket) {
