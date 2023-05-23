@@ -168,7 +168,7 @@ function getData(p, t) {
 	count = 0;
 	line = 0;
 	for (let i = 0; i < writing.length; i++) {
-		words.push(new Word(writing[i], 50 + count + writing[i].length*3, 250 + line*15));
+		words.push(new Word(writing[i], 50 + count + writing[i].length*3 + 3, 250 + line*15));
 		count += words[i].sprite.width;
 		if (words[i].sprite.x > 450) {
 			line++;
