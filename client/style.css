@@ -5,5 +5,5 @@
     src: url("UbuntuMono-Bold.ttf");
 }
 input{
-    font: UbuntuMono
+    font-family: "UbuntuMono"
 }
