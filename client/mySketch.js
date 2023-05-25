@@ -186,6 +186,7 @@ function getData(p, t) {
 			count = 0;
 		}
 	}
+	count = 0;
 }
 
 class Word {
@@ -233,9 +234,9 @@ class DoneWord {
 function mouseReleased() {
 	for (let i = 0; i < words.length; i++) {
 		if (words[i].sprite.x > 100 && words[i].sprite.x < 400 && words[i].sprite.y > 75 && words[i].sprite.y < 225) {
-			t.push(new DoneWord(words[i].te, 50 + count + words[i].te.length*3, 100 + line*15, words[i].sx, words[i].sy, t.length));
+			t.push(new DoneWord(words[i].te, 125 + count + words[i].te.length*3, 100 + line*15, words[i].sx, words[i].sy, t.length));
 			count += t[t.length-1].sprite.width*1.17;
-			if (t[t.length-1].sprite.x > 450) {
+			if (t[t.length-1].sprite.x > 375) {
 				line++;
 				count = 0;
 			}
