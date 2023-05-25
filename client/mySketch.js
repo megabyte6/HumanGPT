@@ -9,6 +9,7 @@ let server;
 let players = [];
 let words = [];
 let fontt;
+let t = [];
 
 server = new WebSocket(`ws://${window.location.host}`);
 
@@ -23,7 +24,9 @@ function setup() {
 	cnv = createCanvas(wh, ht);
   centerCanvas();
   strokeJoin(ROUND);
-  textFont(fontt);
+	if (window.location.host != "preview.openprocessing.org") {
+  	textFont(fontt);
+	}
   textAlign(CENTER, CENTER);
   startButton = createSprite(250, 200, 100, 35);
   startButton.draw = () => {
@@ -43,7 +46,9 @@ function setup() {
 }
 
 function preload() {
-	fontt = loadFont("UbuntuMono-Bold.ttf");
+	if (window.location.host != "preview.openprocessing.org") {
+		fontt = loadFont("UbuntuMono-Bold.ttf");
+	}
 }
 
 function startText() {
@@ -60,8 +65,10 @@ function centerCanvas() {
 }
 
 function mousePressed() {
-	//if (stage == 2) startGame();
-	//if (stage == 4) getData("ways to say hello", "hello hi hey");
+	if (window.location.host == "preview.openprocessing.org") {
+		if (stage == 2) startGame();
+		if (stage == 4) getData("ways to say hello", "hello hi hey");
+	}
 }
 
 function myInputEvent() {
@@ -106,6 +113,9 @@ function draw() {
     noStroke();
     fill(50, 168, 109);
     text(newPrompt, 250, 40);
+		rectMode(CENTER);
+		fill(25, 84, 54);
+		rect(250, 150, 300, 150);
   }
   pop();
 }
@@ -164,6 +174,7 @@ function startGame() {
 function getData(p, t) {
 	newPrompt = p;
 	writing = t.split(" ");
+	writing = shuffle(writing);
 	stage = 5;
 	count = 0;
 	line = 0;
@@ -180,6 +191,9 @@ function getData(p, t) {
 class Word {
 	constructor(t, x, y) {
 		this.sprite = createSprite(x, y, t.length*5, 10, "kinematic");
+		this.te = t;
+		this.sx = x;
+		this.sy = y;
 		this.sprite.draw = () => {
 			fill(255);
 			rect(0, 0, this.sprite.width, this.sprite.height);
@@ -192,4 +206,59 @@ class Word {
 			}
 		}
 	}
+}
+
+class DoneWord {
+	constructor(wt, x, y, sx, sy, ind) {
+		this.sx = sx;
+		this.sy = sy;
+		this.sprite = createSprite(x, y, wt.length*5, 10, "kinematic");
+		this.te = wt;
+		this.sprite.draw = () => {
+			fill(255);
+			rect(0, 0, this.sprite.width, this.sprite.height);
+			fill(0);
+			textSize(8);
+			text(wt, 0, -0.5);
+			if (this.sprite.mouse.pressed()) {
+				words.push(new Word(this.te, this.sx, this.sy));
+				count -= this.sprite.width*1.17;
+				this.sprite.remove();
+				t.splice(ind, 1);
+			}
+		}
+	}
+}
+
+function mouseReleased() {
+	for (let i = 0; i < words.length; i++) {
+		if (words[i].sprite.x > 100 && words[i].sprite.x < 400 && words[i].sprite.y > 75 && words[i].sprite.y < 225) {
+			t.push(new DoneWord(words[i].te, 50 + count + words[i].te.length*3, 100 + line*15, words[i].sx, words[i].sy, t.length));
+			count += t[t.length-1].sprite.width*1.17;
+			if (t[t.length-1].sprite.x > 450) {
+				line++;
+				count = 0;
+			}
+			words[i].sprite.remove();
+			words.splice(i, 1);
+		}
+	}
+}
+
+function shuffle(array) {
+  let currentIndex = array.length,  randomIndex;
+
+  // While there remain elements to shuffle.
+  while (currentIndex != 0) {
+
+    // Pick a remaining element.
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+  }
+
+  return array;
 }
