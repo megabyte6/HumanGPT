@@ -33,7 +33,7 @@ function setup() {
     rect(0, 0, startButton.width, startButton.height, 5, 5);
     noStroke();
     fill(0);
-    text("Start", 0, 3);
+    text("Start", 0, 0);
     if (startButton.mouse.pressed()) {
       stage = 1;
       startText();
@@ -105,7 +105,7 @@ function draw() {
 	if (stage == 5) {
     noStroke();
     fill(50, 168, 109);
-    text("Write a paragraph about " + newPrompt, 250, 150);
+    text(newPrompt, 250, 40);
   }
   pop();
 }
@@ -168,8 +168,8 @@ function getData(p, t) {
 	count = 0;
 	line = 0;
 	for (let i = 0; i < writing.length; i++) {
-		words.push(new Word(writing[i], 50 + count + writing[i].length*3, 100 + line*15));
-		count += words[i].sprite.width;
+		words.push(new Word(writing[i], 50 + count + writing[i].length*3, 250 + line*15));
+		count += words[i].sprite.width*1.17;
 		if (words[i].sprite.x > 450) {
 			line++;
 			count = 0;
@@ -179,13 +179,13 @@ function getData(p, t) {
 
 class Word {
 	constructor(t, x, y) {
-		this.sprite = createSprite(x, y, t.length*6, 10, "kinematic");
+		this.sprite = createSprite(x, y, t.length*5, 10, "kinematic");
 		this.sprite.draw = () => {
 			fill(255);
 			rect(0, 0, this.sprite.width, this.sprite.height);
 			fill(0);
 			textSize(8);
-			text(t, 0, 1);
+			text(t, 0, -0.5);
 			if (this.sprite.mouse.pressing()) {
 				this.sprite.x = mouse.x;
 				this.sprite.y = mouse.y;
