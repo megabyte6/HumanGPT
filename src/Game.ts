@@ -80,6 +80,8 @@ export default class Game {
     }
 
     async tryPrompt(player: Player, prompt: string) {
+
+        this.log(`${player.name} submitted their prompt!`, LogTypes.gameProgress)
         if (this.stage != "wait_prompts")
             return
 
@@ -90,10 +92,12 @@ export default class Game {
             }, 1000)
             return
         }
-        player.origPrompt = prompt
+        
         player.origResponse = response
-
+        player.origPrompt = prompt
         let completeCount = this.players.filter((player)=>{return !!player.origPrompt}).length;
+
+        
 
         if (completeCount == this.players.length) {
             this.sendBackNewPrompts()
