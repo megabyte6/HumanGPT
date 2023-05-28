@@ -111,6 +111,7 @@ export default class Game {
 
        
         player.rearrangedResponse = response
+        this.log(`${player.name} submitted their response!`, LogTypes.gameProgress)
 
         let completeCount = this.players.filter((player)=>{return !!player.rearrangedResponse}).length;
 
