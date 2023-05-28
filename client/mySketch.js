@@ -68,7 +68,7 @@ function centerCanvas() {
 function mousePressed() {
 	if(window.location.host == "preview.openprocessing.org" || true) {
 		if(stage == 2) startGame();
-		if(stage == 4) getData("ways to say hello", "hello abcdefghijklmnopqrstuvwxyz");
+		if(stage == 4) getData("ways to say hello", "hello hi hey abcdefghijklmnopqrstuvwxyz");
 	}
 }
 
@@ -177,7 +177,6 @@ function startGame() {
 function getData(p, t) {
 	newPrompt = p;
 	writing = t.split(" ");
-	writing = shuffle(writing);
 	stage = 5;
 
 	words = new WordList(50,450,250)
@@ -190,6 +189,52 @@ function getData(p, t) {
 	
 
 	finishedWords = new WordList(100,400,75)
+
+	let submitButton = createSprite(450, 150, 80, 35, "kinematic");
+	submitButton.draw = () => {
+		fill(50, 168, 109);
+		stroke(37, 122, 80);
+		strokeWeight(4);
+		rect(0, 0, submitButton.width, submitButton.height, 5, 5);
+		noStroke();
+		fill(0);
+		text("Submit", 0, 0);
+		if(submitButton.mouse.pressed()) {
+			stage = 6;
+			msg = {
+				operation: "submit_response",
+				arguments: {
+					"response": finishedWords.list.map((word)=>word.word).join(" ")
+				}
+			}
+			finishedWords.list.forEach((word)=>word.sprite.remove());
+			finishedWords.list = null;
+			finishedWords = null;
+			words.list.forEach((word)=>word.sprite.remove());
+			words.list = null;
+			words = null;
+			server.send(JSON.stringify(msg));
+			submitButton.remove();
+		}
+	};
+
+	let shuffleButton = createSprite(50, 150, 80, 35, "kinematic");
+	shuffleButton.draw = () => {
+		fill(50, 168, 109);
+		stroke(37, 122, 80);
+		strokeWeight(4);
+		rect(0, 0, shuffleButton.width, shuffleButton.height, 5, 5);
+		noStroke();
+		fill(0);
+		text("Shuffle", 0, 0);
+		if(stage == 6) shuffleButton.remove();
+		if(shuffleButton.mouse.pressed()) {
+			
+			words.list = shuffle(words.list)
+			words.updateSmooth();
+			
+		}
+	};
 	
 	
 
@@ -199,7 +244,7 @@ class Word {
 	constructor(word) {
 		this.sprite = createSprite(0,0,this.getWidthFromWord(word) + 4, 10, "kinematic");
 		this.word = word
-		this.drawtick = 0;
+		this.dragtick = 0;
 		this.sprite.draw = () => {
 			fill(255);
 			rect(0, 0, this.sprite.width, this.sprite.height);
@@ -207,10 +252,11 @@ class Word {
 			textSize(8);
 			text(this.word, 0, -0.5);
 			if(this.sprite.mouse.pressing()) {
-				this.drawtick++
+				this.dragtick++
 				this.sprite.x = mouse.x;
 				this.sprite.y = mouse.y;
 				if(!this.dragged){
+					
 					
 					//first time
 					words.list = words.list.filter((word)=>{
@@ -219,13 +265,20 @@ class Word {
 					
 					words.updateSmooth();
 					words.list.forEach((word)=>word.solidifyLocation())
+
+					finishedWords.list = finishedWords.list.filter((word)=>{
+						return word !== this
+					});
+					
+					finishedWords.updateSmooth();
+					finishedWords.list.forEach((word)=>word.solidifyLocation())
 					
 
 				}
 				this.dragged = true;
 				
 				if(finishedWords.inbounds(this)){
-					if(this.drawtick % 3 == 0){
+					if(this.dragtick % 2 == 0){
 						words.list = words.list.filter((word)=>word !== this);
 				
 						words.updateSmooth();
@@ -233,7 +286,7 @@ class Word {
 					}
 
 				}else{
-					if(this.drawtick % 3 == 0){
+					if(this.dragtick % 2 == 0){
 						finishedWords.list = finishedWords.list.filter((word)=>word !== this);
 						finishedWords.updateSmooth();
 						words.checkPosOfWord(this)
@@ -268,6 +321,28 @@ class Word {
 function mouseReleased() {
 	if(stage == 5){
 		words.list = words.list.filter((word)=> !finishedWords.inbounds(word))
+		words.list = words.list.filter((word)=>{
+			if(word.dragged && word.dragtick < 20){
+				finishedWords.list.push(word);
+				word.dragged = false;
+				word.dragtick = 0;
+				return false;
+
+			}
+			return true;
+		})
+		finishedWords.list = finishedWords.list.filter((word)=>{
+			if(word.dragged && word.dragtick < 20){
+				words.list.push(word);
+				word.dragged = false;
+				word.dragtick = 0;
+				return false;
+
+			}
+			return true;
+		})
+		finishedWords.updateSmooth();
+		words.updateSmooth();
 		words.list.forEach((word)=>{
 			
 			word.solidifyLocation();
@@ -278,6 +353,7 @@ function mouseReleased() {
 			word.solidifyLocation();
 
 		})
+
 		finishedWords.updateSmooth();
 		words.updateSmooth();
 
@@ -382,12 +458,13 @@ class WordList{
 		
 		//find closest word
 		
-		let closestdist = (word.origx - word.sprite.x) ** 2 + 9 * ((word.origy - word.sprite.y) ** 2) ;
+		let closestdist = Math.abs(word.origx - word.sprite.x) + 500 * Math.abs(word.origy - word.sprite.y) ;
+		
 			
 		
 		this.list.forEach((listword, index)=>{
-			//y is weighted 9x
-			let dist = (listword.origx - word.sprite.x) ** 2 + 9 * ((listword.origy - word.sprite.y) ** 2) ;
+			//y is weighted 500x
+			let dist = Math.abs(listword.origx - word.sprite.x) + 500 * Math.abs(listword.origy - word.sprite.y) ;
 			
 			if(dist < closestdist){
 				closestdist = dist;
