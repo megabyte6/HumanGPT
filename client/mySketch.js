@@ -65,13 +65,6 @@ function centerCanvas() {
 	cnv.position(cx, cy);
 }
 
-function mousePressed() {
-	if(window.location.host == "preview.openprocessing.org" || true) {
-		if(stage == 2) startGame();
-		if(stage == 4) getData("ways to say hello", "hello hi hey abcdefghijklmnopqrstuvwxyz");
-	}
-}
-
 function myInputEvent() {
 	if(stage == 1) {
 		name = this.value();
@@ -120,7 +113,37 @@ function draw() {
 		words.tick();
 		finishedWords.tick();
 	}
+	if(stage == 6) {
+		//voting
+	}
 	pop();
+}
+
+function fixSprites() {
+	counting = 1;
+	for (let i = 0; i < allSprites.length; i++) {
+		allSprites[i].draw = () => {
+			fill(50, 168, 109);
+			stroke(37, 122, 80);
+			strokeWeight(8);
+			rect(0, 0, allSprites[i].width, allSprites[i].height);
+			fill(15, 27, 21);
+			textSize(30);
+			strokeWeight(4);
+			text(counting, 0, 0);
+		}
+		counting++;
+	}
+}
+
+function mousePressed() {
+	if(window.location.host == "preview.openprocessing.org" || true) {
+		if(stage == 2) startGame();
+		if(stage == 4) getData("ways to say hello", "hello hi hey abcdefghijklmnopqrstuvwxyz");
+		if(stage == 5) startVoting();
+	}
+	if (stage == 6) {
+	}
 }
 
 function keyPressed() {
@@ -165,6 +188,9 @@ server.onmessage = function(event) {
 	if(message.operation == "new_prompt") {
 		getData(message.arguments.prompt, message.arguments.response);
 	}
+	if(message.operation == "start_voting") {
+		startVoting();
+	}
 }
 
 function startGame() {
@@ -172,6 +198,18 @@ function startGame() {
 	nameInput.size(500, 100);
 	nameInput.position(windowWidth / 2 - 250, windowHeight / 2 - 20);
 	nameInput.value(" ");
+}
+
+function startVoting() {
+	allSprites.remove();
+	stage++;
+	createSprite(500/4, 300/4 + 3.75, (500/4)-30, 150-30);
+	createSprite(500/4, (300/4)*3 - 3.75, (500/4)-30, 150-30);
+	createSprite((500/4)*2, 300/4 + 3.75, (500/4)-30, 150-30);
+	createSprite((500/4)*2, (300/4)*3 - 3.75, (500/4)-30, 150-30);
+	createSprite((500/4)*3, 300/4 + 3.75, (500/4)-30, 150-30);
+	createSprite((500/4)*3, (300/4)*3 - 3.75, (500/4)-30, 150-30);
+	fixSprites();
 }
 
 function getData(p, t) {
