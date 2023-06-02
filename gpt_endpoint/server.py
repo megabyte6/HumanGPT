@@ -29,7 +29,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         response = json.loads("{}")
         self.receivestuff(response)
         
-    async def receivestuff(response):
+    async def receivestuff(self, response):
         response["response"] = await gpt4free.Completion.create(Provider.You, prompt=gpt_request["request"],chat=gpt_request["chat"])     
         self.write_response(response)
     
