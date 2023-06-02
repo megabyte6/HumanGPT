@@ -20,17 +20,19 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         self.write_response(b"")
 
-    async def do_POST(self):
+    def do_POST(self):
         print("received")
         content_length = int(self.headers.get("content-length", 0))
         body = self.rfile.read(content_length)
         print("Request:", body.decode("utf-8"))
         gpt_request = json.loads(body.decode("utf-8"))
         response = json.loads("{}")
-        response["response"] = gpt4free.Completion.create(Provider.You, prompt=gpt_request["request"],chat=gpt_request["chat"])
-
+        receivestuff()
+        
+    async def receivestuff(response){
+        await response["response"] = gpt4free.Completion.create(Provider.You, prompt=gpt_request["request"],chat=gpt_request["chat"])     
         self.write_response(response)
-
+    }
     async def write_response(self, content):
         self.send_response(200)
         self.end_headers()
