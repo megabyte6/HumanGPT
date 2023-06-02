@@ -20,7 +20,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         self.write_response(b"")
 
-    def do_POST(self):
+    async def do_POST(self):
         print("received")
         content_length = int(self.headers.get("content-length", 0))
         body = self.rfile.read(content_length)
@@ -31,7 +31,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
         self.write_response(response)
 
-    def write_response(self, content):
+    async def write_response(self, content):
         self.send_response(200)
         self.end_headers()
         self.wfile.write(json.dumps(content).encode())
