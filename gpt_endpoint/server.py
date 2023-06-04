@@ -26,7 +26,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
         self.send_to_client(b"")
 
-    async def do_POST(self):
+    def do_POST(self):
         """
         An asynchronous function that handles POST requests. It reads the
         content length of the request headers, decodes the request body, and
