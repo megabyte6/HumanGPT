@@ -93,3 +93,4 @@ if __name__ == "__main__":
         arg = argv[1].split(":")
         BIND_HOST = arg[0]
         PORT = int(arg[1])
+    start_server()
