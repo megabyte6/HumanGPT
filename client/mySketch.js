@@ -116,31 +116,47 @@ function draw() {
 	if(stage == 6) {
 		//voting
 	}
+	if (stage == 7) {
+		noStroke();
+		fill(50, 168, 109);
+		text("Waiting for all players to vote...", 250, 150);
+	}
 	pop();
 }
 
-function fixSprites() {
-	counting = 1;
-	for (let i = 0; i < allSprites.length; i++) {
-		allSprites[i].draw = () => {
+class VotingButton {
+	constructor(x, y, w, h, c) {
+		this.sprite = createSprite(x, y, w, h);
+		this.sprite.draw = () => {
 			fill(50, 168, 109);
 			stroke(37, 122, 80);
 			strokeWeight(8);
-			rect(0, 0, allSprites[i].width, allSprites[i].height);
+			rect(0, 0, this.sprite.width, this.sprite.height);
 			fill(15, 27, 21);
 			textSize(30);
 			strokeWeight(4);
-			text(counting, 0, 0);
+			text(c, 0, 0);
+			if (this.sprite.mouse.pressed) {
+				msg = {
+					operation: "submit_vote",
+					arguments: {
+					"vote": c
+					}
+				}
+				server.send(JSON.stringify(msg));
+				stage = 7;
+			}
 		}
-		counting++;
 	}
 }
 
 function mousePressed() {
-	if(window.location.host == "preview.openprocessing.org" || true) {
+	if(window.location.host == "preview.openprocessing.org") {
 		if(stage == 2) startGame();
-		if(stage == 4) getData("ways to say hello", "hello hi hey abcdefghijklmnopqrstuvwxyz");
-		if(stage == 5) startVoting();
+		if(stage == 4)
+			getData("ways to say hello", "hello hi hey")
+		else
+			if(stage == 5) startVoting();
 	}
 	if (stage == 6) {
 	}
@@ -202,14 +218,14 @@ function startGame() {
 
 function startVoting() {
 	allSprites.remove();
-	stage++;
-	createSprite(500/4, 300/4 + 3.75, (500/4)-30, 150-30);
-	createSprite(500/4, (300/4)*3 - 3.75, (500/4)-30, 150-30);
-	createSprite((500/4)*2, 300/4 + 3.75, (500/4)-30, 150-30);
-	createSprite((500/4)*2, (300/4)*3 - 3.75, (500/4)-30, 150-30);
-	createSprite((500/4)*3, 300/4 + 3.75, (500/4)-30, 150-30);
-	createSprite((500/4)*3, (300/4)*3 - 3.75, (500/4)-30, 150-30);
-	fixSprites();
+	stage = 6;
+	let buttons = [];
+	buttons.push(new VotingButton(500/4, 300/4 + 3.75, (500/4)-30, 150-30, 1));
+	buttons.push(new VotingButton(500/4, (300/4)*3 - 3.75, (500/4)-30, 150-30, 2));
+	buttons.push(new VotingButton((500/4)*2, 300/4 + 3.75, (500/4)-30, 150-30, 3));
+	buttons.push(new VotingButton((500/4)*2, (300/4)*3 - 3.75, (500/4)-30, 150-30, 4));
+	buttons.push(new VotingButton((500/4)*3, 300/4 + 3.75, (500/4)-30, 150-30, 5));
+	buttons.push(new VotingButton((500/4)*3, (300/4)*3 - 3.75, (500/4)-30, 150-30, 6));
 }
 
 function getData(p, t) {
