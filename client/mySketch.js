@@ -121,7 +121,14 @@ function draw() {
 		fill(50, 168, 109);
 		text("Waiting for all players to vote...", 250, 150);
 	}
+	if (stage = 8) {
+		//show results
+	}
 	pop();
+}
+
+function showResults() {
+	stage = 8;
 }
 
 class VotingButton {
@@ -204,7 +211,11 @@ server.onmessage = function(event) {
 		getData(message.arguments.prompt, message.arguments.response);
 	}
 	if(message.operation == "start_voting") {
-		startVoting();
+		startVoting(message.arguments.number);
+	}
+	if(message.operation == "end_voting") {
+		endVoting();
+		showResults();
 	}
 }
 
@@ -220,17 +231,16 @@ function endVoting() {
 	let buttons = [];
 }
 
-function startVoting() {
-	
+function startVoting(n) {
 	allSprites.remove();
 	stage = 6;
 	let buttons = [];
-	buttons.push(new VotingButton(500/4, 300/4 + 3.75, (500/4)-30, 150-30, 1));
-	buttons.push(new VotingButton(500/4, (300/4)*3 - 3.75, (500/4)-30, 150-30, 2));
-	buttons.push(new VotingButton((500/4)*2, 300/4 + 3.75, (500/4)-30, 150-30, 3));
-	buttons.push(new VotingButton((500/4)*2, (300/4)*3 - 3.75, (500/4)-30, 150-30, 4));
-	buttons.push(new VotingButton((500/4)*3, 300/4 + 3.75, (500/4)-30, 150-30, 5));
-	buttons.push(new VotingButton((500/4)*3, (300/4)*3 - 3.75, (500/4)-30, 150-30, 6));
+	if (n > 0) buttons.push(new VotingButton(500/4, 300/4 + 3.75, (500/4)-30, 150-30, 1));
+	if (n > 1) buttons.push(new VotingButton(500/4, (300/4)*3 - 3.75, (500/4)-30, 150-30, 2));
+	if (n > 2) buttons.push(new VotingButton((500/4)*2, 300/4 + 3.75, (500/4)-30, 150-30, 3));
+	if (n > 3) buttons.push(new VotingButton((500/4)*2, (300/4)*3 - 3.75, (500/4)-30, 150-30, 4));
+	if (n > 4) buttons.push(new VotingButton((500/4)*3, 300/4 + 3.75, (500/4)-30, 150-30, 5));
+	if (n > 5) buttons.push(new VotingButton((500/4)*3, (300/4)*3 - 3.75, (500/4)-30, 150-30, 6));
 }
 
 function getData(p, t) {
