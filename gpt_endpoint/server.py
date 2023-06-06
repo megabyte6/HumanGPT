@@ -41,7 +41,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
         data = body.decode("utf-8")
         print("Request:", body.decode("utf-8"))
-        self.request_from_gpt(data)
+        await self.request_from_gpt(data)
 
     async def request_from_gpt(self, gpt_request):
         """
