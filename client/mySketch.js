@@ -136,7 +136,7 @@ class VotingButton {
 			textSize(30);
 			strokeWeight(4);
 			text(c, 0, 0);
-			if (this.sprite.mouse.pressed) {
+			if (this.sprite.mouse.pressed()) {
 				msg = {
 					operation: "submit_vote",
 					arguments: {
@@ -157,8 +157,6 @@ function mousePressed() {
 			getData("ways to say hello", "hello hi hey")
 		else
 			if(stage == 5) startVoting();
-	}
-	if (stage == 6) {
 	}
 }
 
@@ -216,7 +214,13 @@ function startGame() {
 	nameInput.value(" ");
 }
 
+function endVoting() {
+	allSprites.remove();
+	let buttons = [];
+}
+
 function startVoting() {
+	
 	allSprites.remove();
 	stage = 6;
 	let buttons = [];
