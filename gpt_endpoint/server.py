@@ -55,7 +55,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
         gpt_request = json.loads(gpt_request)
         response = json.loads("{}")
-        response["response"] = await Completion.create(
+        response["response"] = Completion.create(
             Provider.You,
             prompt=gpt_request["request"],
             chat=gpt_request["chat"],
