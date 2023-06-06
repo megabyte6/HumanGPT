@@ -126,6 +126,18 @@ export default class MessageHandler {
         this.broadcast(data)
     }
 
+    start_voting(playernum) {
+        let names = this.game.players.map((player) => player.name)
+        let data: Message = {
+            operation: "start_voting",
+            arguments: {
+                number: playernum
+            }
+        }
+
+        this.broadcast(data)
+    }
+
     start_game() {
         let data: Message = {
             operation: "start_game",

@@ -105,7 +105,7 @@ export default class Game {
         }
     }
 
-    async submitResponse(player: Player, response: string) {
+    submitResponse(player: Player, response: string) {
         if (this.stage != "wait_responses")
             return
 
@@ -116,9 +116,21 @@ export default class Game {
         let completeCount = this.players.filter((player)=>{return !!player.rearrangedResponse}).length;
 
         if (completeCount == this.players.length) {
-            //this.startSlideshow()
+            this.startSlideshow()
             this.stage = "start_slideshow"
         }
+    }
+
+    startSlideshow(){
+        this.processVoteGroups(this.players);
+        this.handler.start_voting(this.players.length);
+        
+        
+
+    }
+
+    processVoteGroups(p: Player[]){
+        
     }
 
     cycle(array: any[], by: number) {
