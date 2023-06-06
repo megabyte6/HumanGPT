@@ -43,7 +43,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         print("Request:", body.decode("utf-8"))
         self.request_from_gpt(data)
 
-    async def request_from_gpt(self, gpt_request):
+    def request_from_gpt(self, gpt_request):
         """
         Asynchronously handles a POST request from a client. Reads the request
         body, extracts a JSON object, creates a GPT-3 completion request using
