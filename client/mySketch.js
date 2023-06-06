@@ -145,6 +145,7 @@ class VotingButton {
 				}
 				server.send(JSON.stringify(msg));
 				stage = 7;
+				endVoting();
 			}
 		}
 	}
