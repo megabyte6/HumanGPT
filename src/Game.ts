@@ -133,7 +133,7 @@ export default class Game {
 
     processVoteGroups(p: Player[]){
         if(p.length> 36){
-            const chunkSize = 10;
+            const chunkSize = Math.floor(p.length/3);
             for (let i = 0; i < p.length; i += chunkSize) {
                 const chunk = p.slice(i, i + chunkSize);
                 this.processVoteGroups(chunk)
