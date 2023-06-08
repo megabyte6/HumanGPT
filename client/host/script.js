@@ -78,8 +78,10 @@ function draw() {
 		textSize(30);
 		text("Players:", 250, 75);
 		textSize(15);
+		let count = 0;
 		for (let player of players) {
-			text(player, 250, 100 + i*20);
+			text(player, 250, 100 + count*20);
+			count++;
 		}
 	}
 	if (stage == 1) {
