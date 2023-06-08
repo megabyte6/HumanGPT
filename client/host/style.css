@@ -1,0 +1,9 @@
+
+
+@font-face {
+    font-family: UbuntuMono;
+    src: url("UbuntuMono-Bold.ttf");
+}
+input{
+    font-family: "UbuntuMono"
+}
