@@ -163,14 +163,18 @@ export default class Game {
 class VotingGroup{
 
     votes: PlayerVotes[];
+
+    constructor(players: Player[]){
+        this.votes = players.map(player => new PlayerVotes(player));
+    }
     
     startVoting(game: Game){
-        game.handler.start_voting(votes.length);
+        game.handler?.start_voting(this.votes.length);
 
     }
 
     addVote(idx: number){
-        votes[number].addVote();
+        this.votes[idx].addVote();
     }
 
     bestPlayer(){
@@ -183,10 +187,10 @@ class VotingGroup{
 
     assignPoints(){
         let sorted: PlayerVotes[] = this.votes.sort((a,b)=>b.votes - a.votes);
-        sorted[0].player.points += 100;
-        sorted[1].player.points += 70;
-        sorted[2].player.points += 30;
-        sorted[3].player.points += 10;
+        sorted[0].player.score += 100;
+        sorted[1].player.score += 70;
+        sorted[2].player.score += 30;
+        sorted[3].player.score += 10;
 
     }
 
@@ -198,8 +202,13 @@ class PlayerVotes{
     player: Player;
     votes: number;
 
+    constructor(player: Player){
+        this.player = player;
+        this.votes = 0;
+    }
+
     addVote(){
-        votes++;
+        this.votes++;
     }
 
 }
