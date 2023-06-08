@@ -40,6 +40,9 @@ export default class MessageHandler {
             case "submit_response":
                 this.submit_response(client, data)
                 break
+            case "submit_vote":
+                this.submit_vote(client, data)
+                break
             default:
                 this.game.log(`"${data.operation}" is not a valid operation`, LogTypes.warning)
                 break
@@ -98,7 +101,7 @@ export default class MessageHandler {
     submit_prompt(client: WebSocket, data: Message) {
         let player = this.game.getPlayerFromClient(client)
         if(player == null){
-            this.game.log("Player for client could not be found", LogTypes.warning)
+            this.game.log("Player for client could not be found: sumbit_prompt", LogTypes.warning)
             return;
         }
         this.game.tryPrompt(player, data.arguments.prompt)
@@ -107,10 +110,19 @@ export default class MessageHandler {
     submit_response(client: WebSocket, data: Message) {
         let player = this.game.getPlayerFromClient(client)
         if(player == null){
-            this.game.log("Player for client could not be found", LogTypes.warning)
+            this.game.log("Player for client could not be found: submit_response", LogTypes.warning)
             return;
         }
         this.game.submitResponse(player, data.arguments.response)
+    }
+
+    submit_vote(client: WebSocket, data: Message) {
+        let player = this.game.getPlayerFromClient(client)
+        if(player == null){
+            this.game.log("Player for client could not be found: sumbit_vote", LogTypes.warning)
+            return;
+        }
+        this.game.submitVote(player, data.arguments.vote)
     }
 
     // Broadcast player update

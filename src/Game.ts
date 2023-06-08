@@ -68,7 +68,7 @@ export default class Game {
 
         let responses = this.players.map((player) => player.origResponse);
         let responseIndexes = this.players.map((player, idx) => idx)
-        responseIndexes = this.cycle(responseIndexes, by - 1)
+        responseIndexes = this.cycle(responseIndexes, by+1)
 
         this.players.forEach((player, idx) => {
             player.newPrompt = prompts[promptIndexes[idx]] ?? `no submission`
@@ -122,7 +122,8 @@ export default class Game {
     }
 
     startSlideshow(){
-        this.processVoteGroups(this.players);
+        let groups: VotingGroup[] = this.processVoteGroups(this.players);
+
         this.handler?.start_voting(this.players.length);
         
         
@@ -131,6 +132,11 @@ export default class Game {
 
     processVoteGroups(p: Player[]){
         
+    }
+
+    submitVote(player: Player, vote: number){
+        
+
     }
 
     cycle(array: any[], by: number) {
@@ -150,6 +156,50 @@ export default class Game {
         }
         
 
+    }
+
+}
+
+class VotingGroup{
+
+    votes: PlayerVotes[];
+    
+    startVoting(game: Game){
+        game.handler.start_voting(votes.length);
+
+    }
+
+    addVote(idx: number){
+        votes[number].addVote();
+    }
+
+    bestPlayer(){
+        let sorted: PlayerVotes[] = this.votes.sort((a,b)=>b.votes - a.votes);
+        return sorted[0].player
+
+
+
+    }
+
+    assignPoints(){
+        let sorted: PlayerVotes[] = this.votes.sort((a,b)=>b.votes - a.votes);
+        sorted[0].player.points += 100;
+        sorted[1].player.points += 70;
+        sorted[2].player.points += 30;
+        sorted[3].player.points += 10;
+
+    }
+
+
+}
+
+class PlayerVotes{
+
+    player: Player;
+    votes: number;
+
+    addVote(){
+        votes++;
     }
 
 }
