@@ -123,7 +123,7 @@ export default class Game {
     }
 
     startSlideshow(){
-        let group: VotingGroup = this.processVoteGroups(this.players);
+        //let group: VotingGroup = this.processVoteGroups(this.players);
 
         this.handler?.start_voting(this.players.length);
         
