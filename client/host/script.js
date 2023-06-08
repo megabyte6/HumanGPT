@@ -10,7 +10,7 @@ server.onopen = function(event){
             "name": "bleh"
         }  
     }
-    mywsServer.send(JSON.stringify(msg));
+    server.send(JSON.stringify(msg));
 }
 
 function setup() {
