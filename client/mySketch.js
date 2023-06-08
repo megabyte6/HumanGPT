@@ -121,7 +121,7 @@ function draw() {
 		fill(50, 168, 109);
 		text("Waiting for all players to vote...", 250, 150);
 	}
-	if (stage = 8) {
+	if (stage == 8) {
 		//show results
 	}
 	pop();
