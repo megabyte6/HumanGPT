@@ -51,6 +51,7 @@ function startGame() {
     arguments: {
     }      
   }
+	server.send(JSON.stringify(msg));
 }
 
 function preload() {
@@ -78,7 +79,7 @@ function draw() {
 		textSize(30);
 		text("Players:", 250, 75);
 		textSize(15);
-		let count = 0;
+		let count = 1;
 		for (let player of players) {
 			text(player, 250, 100 + count*20);
 			count++;
