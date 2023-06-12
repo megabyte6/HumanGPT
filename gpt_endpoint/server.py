@@ -13,7 +13,6 @@ PORT = 8008
 
 
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
-
     def do_GET(self):
         """
         Handle GET requests.
@@ -76,8 +75,6 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(json.dumps(content).encode())
 
-        # I'm not sure if we need this but I'm too scared to delete it.
-        #print(self.headers)
         print(content)
 
 
