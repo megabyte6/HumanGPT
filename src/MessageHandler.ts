@@ -138,12 +138,14 @@ export default class MessageHandler {
         this.broadcast(data)
     }
 
-    start_voting(playernum: number) {
+    start_voting(playernum: number,promptList: String[], responseList: String[]) {
         let names = this.game.players.map((player) => player.name)
         let data: Message = {
             operation: "start_voting",
             arguments: {
-                number: playernum
+                number: playernum,
+                prompts: promptList,
+                responses: responseList
             }
         }
 
