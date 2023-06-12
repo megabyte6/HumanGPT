@@ -34,6 +34,9 @@ export class VotingGroup {
         const sortedRanks = Array.from(rankedPlayers.entries()).sort((a, b) => b[0] - a[0])
 
         for (let i = 0; i < sortedRanks.length; i++) {
+            if (i > pointsForRank.length)
+                break
+            
             const rank = sortedRanks[i]
             if (typeof rank === "undefined") {
                 break
