@@ -12,7 +12,8 @@ export class VotingGroup {
     }
 
     startVoting(game: Game) {
-        game.handler?.start_voting(this.votes.size);
+        this.handler?.start_voting(this.players.length,this.players.map((player)=>player.newPrompt),this.players.map((player)=>player.rearrangedResponse));
+        
     }
 
     addVote(player: Player) {
