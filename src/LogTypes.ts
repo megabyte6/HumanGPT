@@ -1,6 +1,6 @@
 import chalk = require("chalk")
 
-export default class LogTypes{
+export default class LogTypes {
 
     static warning: LogType = {
         chalkColor: chalk.redBright,
@@ -18,13 +18,13 @@ export default class LogTypes{
     }
 
     static gameProgress: LogType = {
-        chalkColor: (msg:string)=>msg,
+        chalkColor: (msg: string) => msg,
         embedColor: 0x2a9df4
     }
-    
+
 }
 
-export interface LogType{
+export interface LogType {
     chalkColor: Function
     embedColor: number
 }

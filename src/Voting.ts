@@ -36,7 +36,7 @@ export class VotingGroup {
         for (let i = 0; i < sortedRanks.length; i++) {
             if (i > pointsForRank.length)
                 break
-            
+
             const rank = sortedRanks[i]
             if (typeof rank === "undefined") {
                 break

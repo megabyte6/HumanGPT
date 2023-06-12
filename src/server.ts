@@ -8,7 +8,7 @@ import MessageHandler from "./MessageHandler"
 import express = require("express")
 import path = require("path")
 import internal = require("stream")
-import chalk  = require("chalk")
+import chalk = require("chalk")
 import { LogType } from "./LogTypes"
 
 const PORT = 8080
@@ -20,11 +20,11 @@ app.use("/host", express.static(path.resolve(__dirname, "../client/host")))
 
 const server = app.listen(PORT, () => console.log(chalk.greenBright("Listening...")))
 
-const log = function (message: string, color? : LogType) {
-    if(!color) {
+const log = function (message: string, color?: LogType) {
+    if (!color) {
         console.log(`[SERVER]: ${message}`);
     }
-    else{
+    else {
         console.log(`[SERVER]: ${color.chalkColor(message)}`)
     }
     if (LOAD_BOT)

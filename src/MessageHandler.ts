@@ -100,7 +100,7 @@ export default class MessageHandler {
 
     submit_prompt(client: WebSocket, data: Message) {
         let player = this.game.getPlayerFromClient(client)
-        if(player == null){
+        if (player == null) {
             this.game.log("Player for client could not be found: sumbit_prompt", LogTypes.warning)
             return;
         }
@@ -109,7 +109,7 @@ export default class MessageHandler {
 
     submit_response(client: WebSocket, data: Message) {
         let player = this.game.getPlayerFromClient(client)
-        if(player == null){
+        if (player == null) {
             this.game.log("Player for client could not be found: submit_response", LogTypes.warning)
             return;
         }
@@ -118,7 +118,7 @@ export default class MessageHandler {
 
     submit_vote(client: WebSocket, data: Message) {
         let player = this.game.getPlayerFromClient(client)
-        if(player == null){
+        if (player == null) {
             this.game.log("Player for client could not be found: sumbit_vote", LogTypes.warning)
             return;
         }
