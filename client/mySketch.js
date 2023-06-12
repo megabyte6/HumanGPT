@@ -103,6 +103,13 @@ function draw() {
 		fill(50, 168, 109);
 		text("Waiting for all players to answer...", 250, 150);
 	}
+	if (stage > 1) {
+		noStroke();
+		fill(50, 168, 109);
+		rect(0, 280, 80, 40);
+		fill(25, 84, 54);
+		text(name, 40, 289);
+	}
 	if(stage == 5) {
 		noStroke();
 		fill(50, 168, 109);
