@@ -14,7 +14,6 @@ export default class Game {
     handler: MessageHandler | null
     stage: string;
     log: Function;
-    curGroup: VotingGroup | null;
 
     constructor(log: Function) {
         this.log = log;
@@ -22,7 +21,6 @@ export default class Game {
         this.host = null;
         this.handler = null;
         this.stage = "wait_players";
-        this.curGroup = null;
     }
 
     getPlayerFromClient(client: WebSocket) {
@@ -71,7 +69,7 @@ export default class Game {
 
         let responses = this.players.map((player) => player.origResponse);
         let responseIndexes = this.players.map((player, idx) => idx)
-        responseIndexes = this.cycle(responseIndexes, by - 1)
+        responseIndexes = this.cycle(responseIndexes, by + 1)
 
         this.players.forEach((player, idx) => {
             player.newPrompt = prompts[promptIndexes[idx]] ?? `no submission`
@@ -127,67 +125,26 @@ export default class Game {
     startSlideshow() {
         //let group: VotingGroup = this.processVoteGroups(this.players);
 
-        this.handler?.start_voting(this.players.length, this.players.map((player)=>player.newPrompt),this.players.map((player)=>player.rearrangedResponse));
-        
-        
+        this.handler?.start_voting(this.players.length);
 
 
 
     }
 
-    async processVoteGroups(p: Player[]) {
+    processVoteGroups(p: Player[]) {
         if (p.length > 36) {
             const chunkSize = Math.floor(p.length / 3);
             for (let i = 0; i < p.length; i += chunkSize) {
                 const chunk = p.slice(i, i + chunkSize);
-                await this.processVoteGroups(chunk)
+                this.processVoteGroups(chunk)
 
             }
-            return;
-            
-        }
-        maxgroups = 0;
-        max_each = 0;
-        if(p.length > 6){
-            
-            for(let i = 2; i < 7;i++){
-                let num_each = Math.floor(p.length / i);
-                if(p.length % i != 0){
-                    num_each++;
-                }
-                if(num_each > max_each){
-                    max_each = num_each;
-                    maxgroups = i;
-
-                }
-
-            }
-
-            const chunkSize = max_each;
-            for (let i = 0; i < p.length; i += chunkSize) {
-                const chunk = p.slice(i, i + chunkSize);
-                await this.processVoteGroups(chunk)
-                
-            }
-            
-
-
-            return;
-        }else{
-            curGroup = new VotingGroup(p);
-            curGroup.startVoting();
-            await this.curGroup.getResults();
-
-
-
-
-            
 
         }
+        return [];
 
 
 
-        
     }
 
     submitVote(player: Player, vote: number) {
