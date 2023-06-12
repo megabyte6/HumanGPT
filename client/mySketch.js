@@ -103,6 +103,13 @@ function draw() {
 		fill(50, 168, 109);
 		text("Waiting for all players to answer...", 250, 150);
 	}
+	if (stage > 1) {
+		noStroke();
+		fill(50, 168, 109);
+		rect(0, 280, 80, 40);
+		fill(25, 84, 54);
+		text(name, 40, 289);
+	}
 	if(stage == 5) {
 		noStroke();
 		fill(50, 168, 109);
@@ -121,7 +128,7 @@ function draw() {
 		fill(50, 168, 109);
 		text("Waiting for all players to vote...", 250, 150);
 	}
-	if (stage = 8) {
+	if (stage == 8) {
 		//show results
 	}
 	pop();
@@ -244,8 +251,9 @@ function startVoting(n) {
 }
 
 function getData(p, t) {
+	symbols = "!@#$%^&*()_+-={}[]|\\:;'<>,.?/";
 	newPrompt = p;
-	writing = t.split(" ");
+	writing = t.split("").filter((c) => symbols.indexOf(c) == -1).join("").split(" ");
 	stage = 5;
 
 	words = new WordList(50,450,250)

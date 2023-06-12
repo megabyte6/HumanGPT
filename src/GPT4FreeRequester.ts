@@ -20,7 +20,7 @@ export default class GPT4FreeRequester {
 
             return data["response"]
         } catch (exception) {
-            console.log("[GPT]:",LogTypes.warning.chalkColor("GPT fetch failed. Check if the endpoint is open and running."))
+            console.log("[GPT]:", LogTypes.warning.chalkColor("GPT fetch failed. Check if the endpoint is open and running."))
         }
 
         return "Fetch Failed"
@@ -28,7 +28,7 @@ export default class GPT4FreeRequester {
 
 }
 
-export interface Chat{
+export interface Chat {
     question: string,
     answer: string
 }

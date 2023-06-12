@@ -4,6 +4,7 @@ import { WebSocket } from "ws"
 import GPT4FreeRequester from "./GPT4FreeRequester"
 import MessageHandler from "./MessageHandler"
 import LogTypes from "./LogTypes"
+import { VotingGroup } from "./Voting"
 
 export default class Game {
 
@@ -40,10 +41,10 @@ export default class Game {
 
     playerJoin(player: Player) {
         this.players.push(player);
-        if(this.stage == "wait_players"){
+        if (this.stage == "wait_players") {
             this.handler?.players_update()
         }
-        
+
     }
 
     playerLeave(client: WebSocket) {
@@ -68,12 +69,12 @@ export default class Game {
 
         let responses = this.players.map((player) => player.origResponse);
         let responseIndexes = this.players.map((player, idx) => idx)
-        responseIndexes = this.cycle(responseIndexes, by - 1)
+        responseIndexes = this.cycle(responseIndexes, by + 1)
 
         this.players.forEach((player, idx) => {
             player.newPrompt = prompts[promptIndexes[idx]] ?? `no submission`
             player.newResponse = responses[responseIndexes[idx]] ?? `no submission`
-            this.handler?.new_prompt(player, player.newPrompt,player.newResponse)
+            this.handler?.new_prompt(player, player.newPrompt, player.newResponse)
         })
         this.log("Sent!", LogTypes.gameProgress)
 
@@ -92,12 +93,12 @@ export default class Game {
             }, 1000)
             return
         }
-        
+
         player.origResponse = response
         player.origPrompt = prompt
-        let completeCount = this.players.filter((player)=>{return !!player.origPrompt}).length;
+        let completeCount = this.players.filter((player) => { return !!player.origPrompt }).length;
 
-        
+
 
         if (completeCount == this.players.length) {
             this.sendBackNewPrompts()
@@ -109,11 +110,11 @@ export default class Game {
         if (this.stage != "wait_responses")
             return
 
-       
+
         player.rearrangedResponse = response
         this.log(`${player.name} submitted their response!`, LogTypes.gameProgress)
 
-        let completeCount = this.players.filter((player)=>{return !!player.rearrangedResponse}).length;
+        let completeCount = this.players.filter((player) => { return !!player.rearrangedResponse }).length;
 
         if (completeCount == this.players.length) {
             this.startSlideshow()
@@ -121,16 +122,34 @@ export default class Game {
         }
     }
 
-    startSlideshow(){
-        this.processVoteGroups(this.players);
+    startSlideshow() {
+        //let group: VotingGroup = this.processVoteGroups(this.players);
+
         this.handler?.start_voting(this.players.length);
-        
-        
+
+
 
     }
 
-    processVoteGroups(p: Player[]){
-        
+    processVoteGroups(p: Player[]) {
+        if (p.length > 36) {
+            const chunkSize = Math.floor(p.length / 3);
+            for (let i = 0; i < p.length; i += chunkSize) {
+                const chunk = p.slice(i, i + chunkSize);
+                this.processVoteGroups(chunk)
+
+            }
+
+        }
+        return [];
+
+
+
+    }
+
+    submitVote(player: Player, vote: number) {
+
+
     }
 
     cycle(array: any[], by: number) {
@@ -141,14 +160,14 @@ export default class Game {
         return array
     }
 
-    async eval(code: string){
-        try{
+    async eval(code: string) {
+        try {
             return await eval(code);
 
-        }catch(error){
+        } catch (error) {
             return error;
         }
-        
+
 
     }
 
