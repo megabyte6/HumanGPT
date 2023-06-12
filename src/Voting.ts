@@ -3,9 +3,11 @@ import Player from "./Player"
 
 export class VotingGroup {
 
+    players: Player[]
     votes = new Map<Player, number>()
 
     constructor(players: Player[]) {
+        this.players = players
         players.forEach(player => this.votes.set(player, 0))
     }
 
