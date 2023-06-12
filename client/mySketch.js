@@ -253,7 +253,7 @@ function startVoting(n) {
 function getData(p, t) {
 	symbols = "!@#$%^&*()_+-={}[]|\\:;'<>,.?/";
 	newPrompt = p;
-	writing = t.split("").filter((c) => symbols.indexOf(c) == -1).join().split(" ");
+	writing = t.split("").filter((c) => symbols.indexOf(c) == -1).join("").split(" ");
 	stage = 5;
 
 	words = new WordList(50,450,250)
