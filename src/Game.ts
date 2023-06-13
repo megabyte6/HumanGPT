@@ -14,7 +14,7 @@ export default class Game {
     handler: MessageHandler | null
     stage: string;
     log: Function;
-    curGroup: VotingGroup| null;
+    curGroup: VotingGroup | null;
 
     constructor(log: Function) {
         this.log = log;
@@ -71,7 +71,7 @@ export default class Game {
 
         let responses = this.players.map((player) => player.origResponse);
         let responseIndexes = this.players.map((player, idx) => idx)
-        responseIndexes = this.cycle(responseIndexes, by + 1)
+        responseIndexes = this.cycle(responseIndexes, by - 1)
 
         this.players.forEach((player, idx) => {
             player.newPrompt = prompts[promptIndexes[idx]] ?? `no submission`
@@ -131,6 +131,8 @@ export default class Game {
 
         
         
+
+
 
     }
 
@@ -196,10 +198,10 @@ export default class Game {
             
 
         }
+
+
+
         
-
-
-
     }
 
     submitVote(player: Player, vote: number) {
