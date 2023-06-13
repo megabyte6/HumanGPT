@@ -13,6 +13,7 @@ export default class Player {
     newPrompt: string | undefined
     newResponse: string | undefined
     rearrangedResponse: string | undefined
+    voted: Boolean = false;
 
     constructor(client: WebSocket, name: string, game: Game) {
         this.client = client

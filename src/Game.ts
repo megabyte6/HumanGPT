@@ -122,23 +122,76 @@ export default class Game {
         }
     }
 
-    startSlideshow() {
-        //let group: VotingGroup = this.processVoteGroups(this.players);
+    async startSlideshow() {
+        let group = await this.processVoteGroups(this.players);
+        group.assignPoints();
+        this.log("Done all voting, points given")
 
-        this.handler?.start_voting(this.players.length);
-
-
+        
+        
 
     }
 
-    processVoteGroups(p: Player[]) {
+    async processVoteGroups(p: Player[]): Promise<VotingGroup> {
         if (p.length > 36) {
+            let newp: Player[] = [];
             const chunkSize = Math.floor(p.length / 3);
             for (let i = 0; i < p.length; i += chunkSize) {
                 const chunk = p.slice(i, i + chunkSize);
-                this.processVoteGroups(chunk)
+                let group: VotingGroup = await this.processVoteGroups(chunk)
+                group.bestPlayer()?.forEach((player)=>{
+                    newp.push(player);
+                })
 
             }
+            return await this.processVoteGroups(newp);
+            
+        }
+        
+        else if(p.length > 6){
+            let maxgroups = 0;
+            let max_each = 0;
+            
+            for(let i = 2; i < 7;i++){
+                let num_each = Math.floor(p.length / i);
+                if(p.length % i != 0){
+                    num_each++;
+                }
+                if(num_each > 6) continue;
+                if(num_each > max_each){
+                    max_each = num_each;
+                    maxgroups = i;
+
+                }
+
+            }
+            let newp: Player[] = [];
+            const chunkSize = max_each;
+            for (let i = 0; i < p.length; i += chunkSize) {
+                const chunk = p.slice(i, i + chunkSize);
+                let group: VotingGroup = await this.processVoteGroups(chunk)
+                
+                group.bestPlayer()?.forEach((player)=>{
+                    newp.push(player);
+                })
+
+            }
+            return await this.processVoteGroups(newp);
+
+
+        }else{
+            this.curGroup = new VotingGroup(p);
+            this.curGroup.startVoting(this);
+            this.log("Waiting for votes")
+            await this.curGroup.getResults();
+            this.log("All votes received")
+            return this.curGroup;
+           
+
+
+
+
+            
 
         }
         return [];
@@ -148,6 +201,12 @@ export default class Game {
     }
 
     submitVote(player: Player, vote: number) {
+        this.curGroup?.addVote(this.curGroup.players[vote - 1]);
+        player.voted = true;
+        if(this.players.every( p  => p.voted)){
+            this.curGroup?.triggerResolve();
+            this.players.forEach(p=> {p.voted = false});
+        }
 
 
     }
