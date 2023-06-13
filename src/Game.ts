@@ -14,6 +14,7 @@ export default class Game {
     handler: MessageHandler | null
     stage: string;
     log: Function;
+    curGroup: VotingGroup| null;
 
     constructor(log: Function) {
         this.log = log;
@@ -21,6 +22,7 @@ export default class Game {
         this.host = null;
         this.handler = null;
         this.stage = "wait_players";
+        this.curGroup = null;
     }
 
     getPlayerFromClient(client: WebSocket) {
@@ -194,7 +196,7 @@ export default class Game {
             
 
         }
-        return [];
+        
 
 
 
