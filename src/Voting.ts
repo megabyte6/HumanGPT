@@ -17,7 +17,7 @@ export class VotingGroup {
 
     startVoting(game: Game) {
         
-        game.handler?.start_voting(game.players.length,game.players.map((player)=>player.newPrompt ?? ""),game.players.map((player)=>player.rearrangedResponse ?? ""));
+        game.handler?.start_voting(this.players.length,this.players.map((player)=>player.newPrompt ?? ""),this.players.map((player)=>player.rearrangedResponse ?? ""));
         
 
         
