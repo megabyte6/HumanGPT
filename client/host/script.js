@@ -3,7 +3,6 @@ let players = [];
 let prompts = [];
 let responses = [];
 let buttons = [];
-let names = [];
 let allNames = [];
 
 server = new WebSocket(`ws://${window.location.host}`);
@@ -172,7 +171,7 @@ class VotingButton {
 				noStroke();
 				fill(0);
 				textSize(10);
-				text("By: " + names[c-1], 0, 48, 65, 65);
+				text("By: " + this.name, 0, 48, 65, 65);
 			}
 		}
 	}
