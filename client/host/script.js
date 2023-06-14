@@ -2,6 +2,9 @@ let stage = 0;
 let players = [];
 let prompts = [];
 let responses = [];
+let buttons = [];
+let names = [];
+let allNames = [];
 
 server = new WebSocket(`ws://${window.location.host}`);
 
@@ -98,6 +101,18 @@ function draw() {
 		textSize(20);
 		text("Follow the instructions on your screens.", 250, 150);
 	}
+	if (stage == 3) {
+		fill(25, 84, 54);
+		textSize(10);
+		text("Press enter to show results...", 425, 289);
+	}
+	if (stage == 4) {
+		fill(25, 84, 54);
+		textSize(10);
+		for (let i = 0; i < allNames.length; i++) {
+			text(allNames[i].name + "          Score: " + allNames[i].score, 10, 10 + i*15);
+		}
+	}
 	pop();
 }
 
@@ -107,18 +122,30 @@ function mousePressed() {
 			prompts = ["hello", "hi", "hey"];
 			responses = ["wehfiuew fewgfiqw diuqwiud d hiudiu hdiuwh dwuhd duwhd hfdfoiqewfefj  fojff jje", "qhd hfdfhiuwiehf fkn feojfejfqhfduehfhfdhiufh fid iuhfdiushfifdoif", "hewf heif iudiuf eh fid ufeduf hdufh ue fued fiuedfiehfiue hfi efheif heiuf h"];
 			startVoting(3);
+		} else {
+			if (stage == 2) {
+				stage = 3;
+				names = ["name 1", "name 2", "name 3"];
+				for (let i = 0; i < names.length; i++) {
+					buttons[i].name = names[i];
+				}
+			}
 		}
 	}
 }
 
 function endVoting() {
 	allSprites.remove();
-	let buttons = [];
+	buttons = [];
+	showResults();
 }
+
+function showResults() {}
 
 class VotingButton {
 	constructor(x, y, w, h, c) {
 		this.sprite = createSprite(x, y, w, h);
+		this.name = "";
 		this.sprite.draw = () => {
 			fill(50, 168, 109);
 			stroke(37, 122, 80);
@@ -136,6 +163,16 @@ class VotingButton {
 			text(prompts[c-1], 0, -30, 65, 65);
 			textSize(7);
 			text(responses[c-1], 0, 15, 65, 65);
+			if (this.name != "") {
+				fill(15, 27, 21);
+				textSize(30);
+				strokeWeight(4);
+				textWrap(WORD);
+				noStroke();
+				fill(0);
+				textSize(10);
+				text("By: " + names[c-1], 0, 48, 65, 65);
+			}
 		}
 	}
 }
@@ -144,7 +181,7 @@ class VotingButton {
 function startVoting(n) {
 	allSprites.remove();
 	stage = 2;
-	let buttons = [];
+	buttons = [];
 	if (n > 0) buttons.push(new VotingButton(500/4, 300/4 + 3.75, (500/4)-30, 150-30, 1));
 	if (n > 1) buttons.push(new VotingButton(500/4, (300/4)*3 - 3.75, (500/4)-30, 150-30, 2));
 	if (n > 2) buttons.push(new VotingButton((500/4)*2, 300/4 + 3.75, (500/4)-30, 150-30, 3));
@@ -154,7 +191,10 @@ function startVoting(n) {
 }
 
 function keyPressed() {
-	
+	if (keyCode == ENTER && stage == 3) {
+		stage = 4;
+		endVoting();
+	}
 }
 
 server.onmessage = function(event) {
@@ -169,6 +209,10 @@ server.onmessage = function(event) {
 		startVoting(message.arguments.number);
 	}
 	if(message.operation == "end_voting") {
-		
+		stage = 3;
+		allNames = message.arguments.sortedPlayers;
+		for (let i = 0; i < message.arguments.players.length; i++) {
+			buttons[i].name = message.arguments.players[i].name;
+		}
 	}
 }
