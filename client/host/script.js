@@ -106,11 +106,24 @@ function draw() {
 		text("Press enter to show results...", 425, 289);
 	}
 	if (stage == 4) {
-		fill(25, 84, 54);
+		fill(50, 168, 109);
 		textSize(10);
 		for (let i = 0; i < allNames.length; i++) {
+			if(i == 0){
+				fill(219,172,52);
+			}
+			else if(i == 2){
+				fill(92,192,192);
+			}
+			else if(i == 3){
+				fill(219,172,52);
+			}
+			else{
+				fill(80, 50, 20);
+			}
 			textAlign(LEFT);
-			text(allNames[i].name + "          Score: " + allNames[i].score, 10, 10 + i*15);
+			text(allNames[i].name , 10, 10 + i*15);
+			text("Score: " + allNames[i].score, 50, 10 + i*15);
 		}
 	}
 	pop();
