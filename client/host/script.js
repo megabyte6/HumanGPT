@@ -110,6 +110,7 @@ function draw() {
 		fill(25, 84, 54);
 		textSize(10);
 		for (let i = 0; i < allNames.length; i++) {
+			textAlign(LEFT);
 			text(allNames[i].name + "          Score: " + allNames[i].score, 10, 10 + i*15);
 		}
 	}
@@ -211,6 +212,7 @@ server.onmessage = function(event) {
 	if(message.operation == "end_voting") {
 		stage = 3;
 		allNames = message.arguments.sortedPlayers;
+		console.log(message.arguments.players);
 		for (let i = 0; i < message.arguments.players.length; i++) {
 			buttons[i].name = message.arguments.players[i].name;
 		}
