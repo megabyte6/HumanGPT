@@ -2,11 +2,12 @@
 # Usage: ./server
 #        ./server 0.0.0.0:5000
 
-from http.server import HTTPServer, BaseHTTPRequestHandler
+import asyncio
 import json
+from http.server import HTTPServer, BaseHTTPRequestHandler
 from sys import argv
-from gpt4free import Completion, Provider
 
+from gpt4free import Completion, Provider
 
 BIND_HOST = "localhost"
 PORT = 8008
