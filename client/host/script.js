@@ -116,10 +116,10 @@ function draw() {
 				fill(92,192,192);
 			}
 			else if(i == 3){
-				fill(219,172,52);
+				fill(80, 50, 20);
 			}
 			else{
-				fill(80, 50, 20);
+				fill(50, 168, 109);
 			}
 			textAlign(LEFT);
 			text(allNames[i].name , 10, 10 + i*15);
