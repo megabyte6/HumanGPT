@@ -128,6 +128,7 @@ export default class Game {
         let group = await this.processVoteGroups(this.players);
         group.assignPoints();
         this.log("Done all voting, points given")
+        this.handler?.end_voting(group.players,group.rankPlayers(),group.pointsGained,[...this.players].sort((a,b)=> b.score - a.score));
 
         
         

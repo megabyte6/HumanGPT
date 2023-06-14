@@ -6,6 +6,7 @@ export class VotingGroup {
     players: Player[]
     votes = new Map<Player, number>()
     results: Promise<String> | null;
+    pointsGained = new Map<Player, number>()
     triggerResolve: Function;
 
     constructor(players: Player[]) {
@@ -63,7 +64,10 @@ export class VotingGroup {
                 break
             }
 
-            rank[1].forEach((player: Player) => player.score += pointsForRank[i])
+            rank[1].forEach((player: Player) => {
+                player.score += pointsForRank[i]
+                this.pointsGained.set(player, pointsForRank[i])
+            })
         }
     }
 
