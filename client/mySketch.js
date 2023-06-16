@@ -91,7 +91,8 @@ function draw() {
 		noStroke();
 		fill(50, 168, 109);
 		text("Enter A Chat Gpt Prompt", 250, 125);
-		text("How", 130, 163);
+		textSize(12);
+		text(question, 130, 163);
 	}
 	if(stage == 2) {
 		noStroke();
@@ -208,7 +209,7 @@ function keyPressed() {
 			msg = {
 				operation: "submit_prompt",
 				arguments: {
-					"prompt": prompt
+					"prompt": question + " " + prompt
 				}
 			}
 			server.send(JSON.stringify(msg));
