@@ -93,7 +93,7 @@ function draw() {
 		fill(50, 168, 109);
 		text("Enter A Chat Gpt Prompt", 250, 125);
 		textSize(12);
-		text(question, 130, 150);
+		text(question, 120, 165);
 	}
 	if(stage == 2) {
 		noStroke();
