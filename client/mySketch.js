@@ -11,6 +11,8 @@ let players = [];
 let fontt;
 let words;
 let t = [];
+let allPlayers = [];
+let question = "";
 
 server = new WebSocket(`ws://${window.location.host}`);
 
@@ -54,6 +56,7 @@ function preload() {
 
 function startText() {
 	nameInput = createInput("");
+	nameInput.elt.focus();
 	nameInput.position(windowWidth / 2 - 150, windowHeight / 2 - 20);
 	nameInput.size(300, 40);
 	nameInput.input(myInputEvent);
@@ -89,13 +92,23 @@ function draw() {
 		noStroke();
 		fill(50, 168, 109);
 		text("Enter A Chat Gpt Prompt", 250, 125);
+		textSize(12);
+		text("How", 161, 158);
 	}
 	if(stage == 2) {
 		noStroke();
 		fill(50, 168, 109);
-		text("Waiting for other players to join...", 250, 150);
-		for(let i = 0; i < players.length; i++) {
-			text(players[i], 250, 175 + i * 20);
+		text("Waiting for other players to join...", 250, 65);
+		let count = 1;
+		for (let player of players) {
+			if (count < 7) {
+				text(player, 175, 75 + count*20);
+			} else if (count < 13) {
+				text(player, 250, 75 + (count-6)*20);
+			} else {
+				text(player, 325, 75 + (count-12)*20);
+			}
+			count++;
 		}
 	}
 	if(stage == 4) {
@@ -129,7 +142,9 @@ function draw() {
 		text("Waiting for all players to vote...", 250, 150);
 	}
 	if (stage == 8) {
-		//show results
+		noStroke();
+		fill(50, 168, 109);
+		text("Look up at the front to see the results!", 250, 150);
 	}
 	pop();
 }
@@ -197,7 +212,7 @@ function keyPressed() {
 			msg = {
 				operation: "submit_prompt",
 				arguments: {
-					"prompt": prompt
+					"prompt": question + " " + prompt
 				}
 			}
 			server.send(JSON.stringify(msg));
@@ -206,13 +221,14 @@ function keyPressed() {
 }
 
 server.onmessage = function(event) {
-	const {data} = event;
+	const {data} = event
 	let message = JSON.parse(data);
 	if(message.operation == "players_update") {
 		players = message.arguments.players;
 	}
 	if(message.operation == "start_game") {
 		startGame();
+		question = message.arguments.word;
 	}
 	if(message.operation == "new_prompt") {
 		getData(message.arguments.prompt, message.arguments.response);
@@ -223,12 +239,14 @@ server.onmessage = function(event) {
 	if(message.operation == "end_voting") {
 		endVoting();
 		showResults();
+		allPlayers = message.arguments.sortedPlayers;
 	}
 }
 
 function startGame() {
 	stage = 3;
 	nameInput.size(500, 100);
+	nameInput.elt.focus();
 	nameInput.position(windowWidth / 2 - 250, windowHeight / 2 - 20);
 	nameInput.value(" ");
 }

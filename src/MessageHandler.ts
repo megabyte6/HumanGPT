@@ -87,6 +87,7 @@ export default class MessageHandler {
     init_host(client: WebSocket, data: Message) {
         if (this.game.host == null)
             this.game.host = new Host(client, this.game)
+        this.players_update();
     }
 
     //host triggers the game start
@@ -183,10 +184,11 @@ export default class MessageHandler {
         this.broadcast(data)
     }
 
-    start_game() {
+    start_game(word: String) {
         let data: Message = {
             operation: "start_game",
             arguments: {
+                word: word
 
             }
         }
