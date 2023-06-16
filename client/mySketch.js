@@ -56,6 +56,7 @@ function preload() {
 
 function startText() {
 	nameInput = createInput("");
+	nameInput.elt.focus();
 	nameInput.position(windowWidth / 2 - 150, windowHeight / 2 - 20);
 	nameInput.size(300, 40);
 	nameInput.input(myInputEvent);
