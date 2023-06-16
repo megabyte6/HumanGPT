@@ -93,7 +93,7 @@ function draw() {
 		fill(50, 168, 109);
 		text("Enter A Chat Gpt Prompt", 250, 125);
 		textSize(12);
-		text(question, 130, 163);
+		text(question, 120, 165);
 	}
 	if(stage == 2) {
 		noStroke();
@@ -219,7 +219,7 @@ function keyPressed() {
 }
 
 server.onmessage = function(event) {
-	const {data} = event;
+	const {data} = event
 	let message = JSON.parse(data);
 	if(message.operation == "players_update") {
 		players = message.arguments.players;
@@ -244,6 +244,7 @@ server.onmessage = function(event) {
 function startGame() {
 	stage = 3;
 	nameInput.size(500, 100);
+	nameInput.elt.focus();
 	nameInput.position(windowWidth / 2 - 250, windowHeight / 2 - 20);
 	nameInput.value(" ");
 }
