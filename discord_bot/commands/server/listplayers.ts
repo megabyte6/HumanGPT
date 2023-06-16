@@ -63,11 +63,11 @@ module.exports = {
 			
 			const prevbutton = new ButtonBuilder()
 			.setCustomId('prevbutton')
-			.setLabel(":arrow_backward:")
+			.setLabel("◀️")
 			.setStyle(ButtonStyle.Secondary);
 			const nextbutton = new ButtonBuilder()
 			.setCustomId('nextbutton')
-			.setLabel(":arrow_forward:")
+			.setLabel("▶️")
 			.setStyle(ButtonStyle.Secondary);
 			const row = new ActionRowBuilder()
 			.addComponents(prevbutton, nextbutton);
