@@ -57,7 +57,8 @@ export default class Game {
 
     start() {
         this.stage = "wait_prompts"
-        this.handler?.start_game()
+        let words = ["Where", "What", "Why", "How"]
+        this.handler?.start_game(words[Math.floor((words.length - 1) * Math.random()) + 1]);
         this.log("Game started, waiting for prompts...", LogTypes.gameProgress)
     }
 
