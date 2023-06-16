@@ -5,5 +5,18 @@
     src: url("UbuntuMono-Bold.ttf");
 }
 input{
-    font-family: "UbuntuMono"
+    font-family: "UbuntuMono";
+    /* make input show only text and not background with font size 20px */
+    font-size: 24px;
+    /* make input background transparent */
+    background: transparent;
+    border: none;
+    /* make input border transparent */
+    border-bottom: 1px solid transparent ;
+    /* make input border transparent */
+    outline: none;
+    /* make input border transparent */
+    color: rgb(50, 168, 109);
+    
+
 }
