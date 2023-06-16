@@ -11,6 +11,8 @@ let players = [];
 let fontt;
 let words;
 let t = [];
+let allPlayers = [];
+let question = "";
 
 server = new WebSocket(`ws://${window.location.host}`);
 
@@ -89,13 +91,22 @@ function draw() {
 		noStroke();
 		fill(50, 168, 109);
 		text("Enter A Chat Gpt Prompt", 250, 125);
+		text("How", 130, 163);
 	}
 	if(stage == 2) {
 		noStroke();
 		fill(50, 168, 109);
-		text("Waiting for other players to join...", 250, 150);
-		for(let i = 0; i < players.length; i++) {
-			text(players[i], 250, 175 + i * 20);
+		text("Waiting for other players to join...", 250, 65);
+		let count = 1;
+		for (let player of players) {
+			if (count < 7) {
+				text(player, 175, 75 + count*20);
+			} else if (count < 13) {
+				text(player, 250, 75 + (count-6)*20);
+			} else {
+				text(player, 325, 75 + (count-12)*20);
+			}
+			count++;
 		}
 	}
 	if(stage == 4) {
@@ -213,6 +224,7 @@ server.onmessage = function(event) {
 	}
 	if(message.operation == "start_game") {
 		startGame();
+		question = message.arguments.word;
 	}
 	if(message.operation == "new_prompt") {
 		getData(message.arguments.prompt, message.arguments.response);
@@ -223,6 +235,7 @@ server.onmessage = function(event) {
 	if(message.operation == "end_voting") {
 		endVoting();
 		showResults();
+		allPlayers = message.arguments.sortedPlayers;
 	}
 }
 
