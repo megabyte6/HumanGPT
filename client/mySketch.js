@@ -93,7 +93,7 @@ function draw() {
 		fill(50, 168, 109);
 		text("Enter A Chat Gpt Prompt", 250, 125);
 		textSize(12);
-		text(question, 120, 164);
+		text("How", 127, 163);
 	}
 	if(stage == 2) {
 		noStroke();
@@ -142,7 +142,9 @@ function draw() {
 		text("Waiting for all players to vote...", 250, 150);
 	}
 	if (stage == 8) {
-		//show results
+		noStroke();
+		fill(50, 168, 109);
+		text("Look up at the front to see the results!", 250, 150);
 	}
 	pop();
 }

@@ -30,6 +30,8 @@ function setup() {
 	strokeJoin(ROUND);
 	if(window.location.host != "preview.openprocessing.org") {
 		textFont(fontt);
+	} else {
+		players = ["gewgewge", "gewgewge", "gewgewge", "gewgewge", "gewgewge", "gewgewge", "gewgewge", "gewgewge", "gewgewge", "gewgewge", "gewgewge", "gewgewge", "gewgewge", "gewgewge", "gewgewge", "gewgewge", "gewgewge", "gewgewge", "gewgewge", "gewgewge", "gewgewge", "gewgewge", "gewgewge", "gewgewge", "gewgewge", "gewgewge", "gewgewge", "gewgewge", "gewgewge", "gewgewge", "gewgewge", "gewgewge", "gewgewge"];
 	}
 	textAlign(CENTER, CENTER);
 	startButton = createSprite(250, 250, 100, 30);
@@ -81,16 +83,16 @@ function draw() {
 		noStroke();
 		fill(50, 168, 109);
 		textSize(30);
-		text("Players:", 250, 75);
+		text("Players:", 250, 45);
 		textSize(15);
 		let count = 1;
 		for (let player of players) {
-			if (count < 8) {
-				text(player, 175, 100 + count*20);
-			} else if (count < 15) {
-				text(player, 250, 100 + count*20);
+			if (count < 9) {
+				text(player, 175, 55 + count*20);
+			} else if (count < 17) {
+				text(player, 250, 55 + (count-8)*20);
 			} else {
-				text(player, 325, 100 + count*20);
+				text(player, 325, 55 + (count-16)*20);
 			}
 			count++;
 		}
@@ -112,16 +114,17 @@ function draw() {
 			if(i == 0){
 				fill(219,172,52);
 			}
-			else if(i == 2){
+			else if(i == 1){
 				fill(92,192,192);
 			}
-			else if(i == 3){
+			else if(i == 2){
 				fill(80, 50, 20);
 			}
 			else{
 				fill(50, 168, 109);
 			}
 			textAlign(LEFT);
+			textSize(50);
 			text(allNames[i].name , 10, 10 + i*15);
 			text("Score: " + allNames[i].score, 50, 10 + i*15);
 		}
