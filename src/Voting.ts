@@ -13,21 +13,19 @@ export class VotingGroup {
         this.players = players
         players.forEach(player => this.votes.set(player, 0))
         this.results = null;
-        this.triggerResolve = ()=>{}
+        this.triggerResolve = () => { }
     }
 
     startVoting(game: Game) {
-        
-        game.handler?.start_voting(this.players.length,this.players.map((player)=>player.newPrompt ?? ""),this.players.map((player)=>player.rearrangedResponse ?? ""));
-        
-
-        
-        
+        game.handler?.start_voting(
+            this.players.length,
+            this.players.map((player) => player.newPrompt ?? ""),
+            this.players.map((player) => player.rearrangedResponse ?? ""));
     }
 
-    async getResults(){
-        this.results = new Promise((resolve,reject)=>{
-            this.triggerResolve = ()=>{
+    async getResults() {
+        this.results = new Promise((resolve, reject) => {
+            this.triggerResolve = () => {
                 resolve("success");
             }
         })

@@ -139,7 +139,7 @@ export default class MessageHandler {
         this.broadcast(data)
     }
 
-    start_voting(playernum: number,promptList: String[], responseList: String[]) {
+    start_voting(playernum: number, promptList: String[], responseList: String[]) {
         let names = this.game.players.map((player) => player.name)
         let data: Message = {
             operation: "start_voting",
@@ -153,15 +153,15 @@ export default class MessageHandler {
         this.broadcast(data)
     }
 
-    end_voting(players: Player[],rankedPlayers: Map<Number, Player[]>, addedScores: Map<Player, number>, sortedPlayers: Player[]) {
-        
+    end_voting(players: Player[], rankedPlayers: Map<Number, Player[]>, addedScores: Map<Player, number>, sortedPlayers: Player[]) {
+
         let data: Message = {
             operation: "end_voting",
             arguments: {
                 players: players.map((p) => {
                     let ans = -1;
-                    rankedPlayers.forEach((parr,key)=>{
-                        if(parr.includes(p)){
+                    rankedPlayers.forEach((parr, key) => {
+                        if (parr.includes(p)) {
                             ans = key.valueOf();
                         }
                     })
@@ -171,13 +171,13 @@ export default class MessageHandler {
                         addedScore: addedScores.get(p)
                     }
                 }),
-                sortedPlayers: sortedPlayers.map((player)=>{
-                    return{
+                sortedPlayers: sortedPlayers.map((player) => {
+                    return {
                         name: player.name,
                         score: player.score
                     }
                 })
-            
+
             }
         }
 
