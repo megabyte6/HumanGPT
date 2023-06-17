@@ -2,12 +2,11 @@
 # Usage: ./server
 #        ./server 0.0.0.0:5000
 
-import asyncio
-import json
 from http.server import HTTPServer, BaseHTTPRequestHandler
+import json
 from sys import argv
-
 from gpt4free import Completion, Provider
+
 
 BIND_HOST = "localhost"
 PORT = 8008
@@ -43,7 +42,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         print("Request:", body.decode("utf-8"))
         self.request_from_gpt(data)
 
-    async def request_from_gpt(self, gpt_request):
+    def request_from_gpt(self, gpt_request):
         """
         Asynchronously handles a POST request from a client. Reads the request
         body, extracts a JSON object, creates a GPT-3 completion request using
@@ -55,7 +54,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
         gpt_request = json.loads(gpt_request)
         response = json.loads("{}")
-        response["response"] = await Completion.create(
+        response["response"] = Completion.create(
             Provider.You,
             prompt=gpt_request["request"],
             chat=gpt_request["chat"],
