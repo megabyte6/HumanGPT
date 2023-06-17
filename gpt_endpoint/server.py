@@ -37,7 +37,7 @@ class Server:
         await site.start()
 
         if self.verbose:
-            print(f"Listening on http://{self.host}:{self.port}")
+            print(f"Listening on http://{self.host}:{self.port}\n")
 
     async def handle_post(self, request: web.Request):
         """
@@ -56,20 +56,26 @@ class Server:
         body = await request.content.read()
         data = body.decode("utf-8")
         if self.verbose:
-            print(f"Received POST request: {data}")
+            print(f"Received POST request: {data}\n")
 
         gpt_request = json.loads(data)
         response = {}
-        response["response"] = Completion.create(
-            provider=Provider.You,
-            prompt=gpt_request["request"],
-            chat=gpt_request["chat"],
+
+        response["response"] = await asyncio.get_event_loop().run_in_executor(
+            None, self.generate_response, gpt_request["request"], gpt_request["chat"]
         )
 
         if self.verbose:
-            print(f"Response: {response}")
+            print(f"Response: {response}\n")
 
         return web.json_response(response)
+
+    def generate_response(self, prompt, chat):
+        return Completion.create(
+            provider=Provider.You,
+            prompt=prompt,
+            chat=chat,
+        )
 
 
 if __name__ == "__main__":
