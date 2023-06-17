@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Usage: ./server
+#        ./server localhost:8080
 
 import asyncio
 import json
