@@ -80,7 +80,6 @@ export default class Game {
             this.handler?.new_prompt(player, player.newPrompt, player.newResponse)
         })
         this.log("Sent!", LogTypes.gameProgress)
-
     }
 
     async tryPrompt(player: Player, prompt: string) {
@@ -101,8 +100,6 @@ export default class Game {
         player.origPrompt = prompt
         let completeCount = this.players.filter((player) => { return !!player.origPrompt }).length;
 
-
-
         if (completeCount == this.players.length) {
             this.sendBackNewPrompts()
             this.stage = "wait_responses"
@@ -112,7 +109,6 @@ export default class Game {
     submitResponse(player: Player, response: string) {
         if (this.stage != "wait_responses")
             return
-
 
         player.rearrangedResponse = response
         this.log(`${player.name} submitted their response!`, LogTypes.gameProgress)
@@ -129,13 +125,7 @@ export default class Game {
         let group = await this.processVoteGroups(this.players);
         group.assignPoints();
         this.log("Done all voting, points given")
-        this.handler?.end_voting(group.players,group.rankPlayers(),group.pointsGained,[...this.players].sort((a,b)=> b.score - a.score));
-
-        
-        
-
-
-
+        this.handler?.end_voting(group.players, group.rankPlayers(), group.pointsGained, [...this.players].sort((a, b) => b.score - a.score));
     }
 
     async processVoteGroups(p: Player[]): Promise<VotingGroup> {
@@ -145,39 +135,38 @@ export default class Game {
             for (let i = 0; i < p.length; i += chunkSize) {
                 const chunk = p.slice(i, i + chunkSize);
                 let group: VotingGroup = await this.processVoteGroups(chunk)
-                group.bestPlayer()?.forEach((player)=>{
+                group.bestPlayer()?.forEach((player) => {
                     newp.push(player);
                 })
 
             }
             return await this.processVoteGroups(newp);
-            
         }
-        
-        else if(p.length > 6){
+
+        else if (p.length > 6) {
             let maxgroups = 0;
             let max_each = 0;
-            
-            for(let i = 2; i < 7;i++){
+
+            for (let i = 2; i < 7; i++) {
                 let num_each = Math.floor(p.length / i);
-                if(p.length % i != 0){
+                if (p.length % i != 0) {
                     num_each++;
                 }
-                if(num_each > 6) continue;
-                if(num_each > max_each){
+                if (num_each > 6)
+                    continue;
+                if (num_each > max_each) {
                     max_each = num_each;
                     maxgroups = i;
 
                 }
-
             }
             let newp: Player[] = [];
             const chunkSize = max_each;
             for (let i = 0; i < p.length; i += chunkSize) {
                 const chunk = p.slice(i, i + chunkSize);
                 let group: VotingGroup = await this.processVoteGroups(chunk)
-                
-                group.bestPlayer()?.forEach((player)=>{
+
+                group.bestPlayer()?.forEach((player) => {
                     newp.push(player);
                 })
 
@@ -185,36 +174,23 @@ export default class Game {
             return await this.processVoteGroups(newp);
 
 
-        }else{
+        } else {
             this.curGroup = new VotingGroup(p);
             this.curGroup.startVoting(this);
             this.log("Waiting for votes")
             await this.curGroup.getResults();
             this.log("All votes received")
             return this.curGroup;
-           
-
-
-
-
-            
-
         }
-
-
-
-        
     }
 
     submitVote(player: Player, vote: number) {
         this.curGroup?.addVote(this.curGroup.players[vote - 1]);
         player.voted = true;
-        if(this.players.every( p  => p.voted)){
+        if (this.players.every(p => p.voted)) {
             this.curGroup?.triggerResolve();
-            this.players.forEach(p=> {p.voted = false});
+            this.players.forEach(p => { p.voted = false });
         }
-
-
     }
 
     cycle(array: any[], by: number) {
@@ -232,8 +208,6 @@ export default class Game {
         } catch (error) {
             return error;
         }
-
-
     }
 
 }
