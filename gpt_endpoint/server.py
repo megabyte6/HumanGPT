@@ -1,93 +1,94 @@
 #!/usr/bin/env python3
 # Usage: ./server
-#        ./server 0.0.0.0:5000
+#        ./server localhost:8080
 
-from http.server import HTTPServer, BaseHTTPRequestHandler
+import asyncio
 import json
 from sys import argv
+
+from aiohttp import web
 from gpt4free import Completion, Provider
 
 
-BIND_HOST = "localhost"
-PORT = 8008
+class Server:
+    def __init__(self, bind_host="127.0.0.1", bind_port=8008, verbose=False):
+        self.host = bind_host
+        self.port = bind_port
+        self.verbose = verbose
 
-
-class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
-    def do_GET(self):
-        """
-        Handle GET requests.
-
-        This method is called by the server whenever a GET request is received.
-        It writes an empty response to the client.
-
-        Returns: None
-        """
-
-        self.send_to_client(b"")
-
-    def do_POST(self):
-        """
-        An asynchronous function that handles POST requests. It reads the
-        content length of the request headers, decodes the request body, and
-        sends the data to the "request_from_gpt" method.
-
-        Returns: None
-        """
-
-        print("Received POST request")
-        content_length = int(self.headers.get("content-length", 0))
-        body = self.rfile.read(content_length)
-
-        data = body.decode("utf-8")
-        print("Request:", body.decode("utf-8"))
-        self.request_from_gpt(data)
-
-    def request_from_gpt(self, gpt_request):
-        """
-        Asynchronously handles a POST request from a client. Reads the request
-        body, extracts a JSON object, creates a GPT-3 completion request using
-        the extracted "request" and "chat" fields from the JSON, and sends the
-        response in a JSON object with the "response" field.
-
-        Returns: None
-        """
-
-        gpt_request = json.loads(gpt_request)
-        response = json.loads("{}")
-        response["response"] = Completion.create(
-            Provider.You,
-            prompt=gpt_request["request"],
-            chat=gpt_request["chat"],
+        self.app = web.Application()
+        self.app.router.add_routes(
+            [
+                web.post("/", self.handle_post),
+            ]
         )
 
-        self.send_to_client(response)
-
-    def send_to_client(self, content):
+    async def start(self):
         """
-        Write a response to the client.
+        Asynchronously starts the web server on the specified host and port.
 
-        This method takes a bytes object as an argument and writes it as a response to the client.
-
-        Returns: None
+        Returns:
+            None
         """
 
-        self.send_response(200)
-        self.end_headers()
-        self.wfile.write(json.dumps(content).encode())
+        runner = web.AppRunner(self.app)
+        await runner.setup()
+        site = web.TCPSite(runner, self.host, self.port)
+        await site.start()
 
-        print(content)
+        if self.verbose:
+            print(f"Listening on http://{self.host}:{self.port}\n")
 
+    async def handle_post(self, request: web.Request):
+        """
+        Asynchronously handles a POST request by reading the request content,
+        decoding it, and creating a response using data from the request. The
+        response is then returned as a JSON response object.
 
-def start_server():
-    print(f"Listening on http://{BIND_HOST}:{PORT}\n")
+        Args:
+            request (aiohttp.web.Request): The HTTP request object.
 
-    httpd = HTTPServer((BIND_HOST, PORT), SimpleHTTPRequestHandler)
-    httpd.serve_forever()
+        Returns:
+            aiohttp.web.Response: A response object containing the response
+            data in JSON format.
+        """
+
+        body = await request.content.read()
+        data = body.decode("utf-8")
+        if self.verbose:
+            print(f"Received POST request: {data}\n")
+
+        gpt_request = json.loads(data)
+        response = {}
+
+        response["response"] = await asyncio.get_event_loop().run_in_executor(
+            None, self.generate_response, gpt_request["request"], gpt_request["chat"]
+        )
+
+        if self.verbose:
+            print(f"Response: {response}\n")
+
+        return web.json_response(response)
+
+    def generate_response(self, prompt, chat):
+        return Completion.create(
+            provider=Provider.You,
+            prompt=prompt,
+            chat=chat,
+        )
 
 
 if __name__ == "__main__":
+    HOST = "127.0.0.1"
+    PORT = "8008"
+
     if len(argv) > 1:
         arg = argv[1].split(":")
-        BIND_HOST = arg[0]
+        HOST = arg[0]
         PORT = int(arg[1])
-    start_server()
+
+    server = Server(HOST, PORT, verbose=True)
+
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(server.start())
+    loop.run_forever()
