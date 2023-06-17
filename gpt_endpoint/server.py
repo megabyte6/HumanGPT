@@ -41,15 +41,16 @@ class Server:
 
     async def handle_post(self, request: web.Request):
         """
-        Asynchronously handles a POST request by reading the request content, decoding it,
-        and creating a response using data from the request. The response is then returned
-        as a JSON response object.
+        Asynchronously handles a POST request by reading the request content,
+        decoding it, and creating a response using data from the request. The
+        response is then returned as a JSON response object.
 
         Args:
-            request (web.Request): The HTTP request object.
+            request (aiohttp.web.Request): The HTTP request object.
 
         Returns:
-            web.Response: A response object containing the response data in JSON format.
+            aiohttp.web.Response: A response object containing the response
+            data in JSON format.
         """
 
         body = await request.content.read()
