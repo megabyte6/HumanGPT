@@ -10,7 +10,7 @@ let gpt = new GPT4FreeRequester();
 function triggerQuestion() {
     rl.question("Prompt: ", async (answer) => {
         let reply = await gpt.getResponse(answer);
-        console.log("AI:", reply);
+        console.log("AI: ", reply);
 
         setTimeout(triggerQuestion, 10);
     });
