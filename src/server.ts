@@ -1,15 +1,15 @@
-import { WebSocket, WebSocketServer } from "ws"
 import { IncomingMessage } from "http"
 import { networkInterfaces } from "os"
+import { WebSocketServer } from "ws"
 
 import Game from "./Game"
+import { LogType } from "./LogTypes"
 import MessageHandler from "./MessageHandler"
 
 import express = require("express")
 import path = require("path")
 import internal = require("stream")
 import chalk = require("chalk")
-import { LogType } from "./LogTypes"
 
 const PORT = 8080
 const LOAD_BOT = true

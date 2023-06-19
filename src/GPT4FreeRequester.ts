@@ -1,4 +1,4 @@
-import fetch from "node-fetch-commonjs"
+import fetch from "node-fetch-commonjs";
 import LogTypes from "./LogTypes";
 
 export default class GPT4FreeRequester {
