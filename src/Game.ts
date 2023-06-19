@@ -4,7 +4,7 @@ import { WebSocket } from "ws"
 import GPT4FreeRequester from "./GPT4FreeRequester"
 import MessageHandler from "./MessageHandler"
 import LogTypes from "./LogTypes"
-import { VotingGroup } from "./Voting"
+import VotingGroup from "./VotingGroup"
 
 export default class Game {
 
