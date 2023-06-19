@@ -80,7 +80,7 @@ class Server:
 
 if __name__ == "__main__":
     HOST = "127.0.0.1"
-    PORT = "8008"
+    PORT = 8008
 
     if len(argv) > 1:
         arg = argv[1].split(":")
