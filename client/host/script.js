@@ -124,9 +124,8 @@ function draw() {
 				fill(50, 168, 109);
 			}
 			textAlign(LEFT);
-			textSize(50);
-			text(allNames[i].name , 10, 10 + i*15);
-			text("Score: " + allNames[i].score, 50, 10 + i*15);
+			textSize(20);
+			text(allNames[i].name + "        Score: " + allNames[i].score, 10, 25 + i*30);
 		}
 	}
 	pop();
@@ -154,6 +153,16 @@ function endVoting() {
 	allSprites.remove();
 	buttons = [];
 	showResults();
+	let newGameButton = createSprite(450, 270, 70, 30);
+	newGameButton.draw = () => {
+		fill(255);
+		rect(0, 0, newGameButton.width, newGameButton.height);
+		fill(0);
+		text("New Game", 0, 0);
+		if (newGameButton.mouse.pressed()) {
+			startGame();
+		}
+	}
 }
 
 function showResults() {}
@@ -210,6 +219,9 @@ function keyPressed() {
 	if (keyCode == ENTER && stage == 3) {
 		stage = 4;
 		endVoting();
+		if(window.location.host == "preview.openprocessing.org") {
+			allNames = ["fehwfiuhwef", "ahfiheh", "jefjoiewf"]
+		}
 	}
 }
 
