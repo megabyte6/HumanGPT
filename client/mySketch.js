@@ -13,6 +13,7 @@ let words;
 let t = [];
 let allPlayers = [];
 let question = "";
+let score = 0;
 
 server = new WebSocket(`ws://${window.location.host}`);
 
@@ -122,6 +123,10 @@ function draw() {
 		rect(0, 280, 80, 40);
 		fill(25, 84, 54);
 		text(name, 40, 289);
+		fill(50, 168, 109);
+		rect(400, 280, 100, 40);
+		fill(25, 84, 54);
+		text("Score: " + score, 450, 289);
 	}
 	if(stage == 5) {
 		noStroke();
@@ -227,6 +232,7 @@ server.onmessage = function(event) {
 		players = message.arguments.players;
 	}
 	if(message.operation == "start_game") {
+		allSprites.remove();
 		startGame();
 		question = message.arguments.word;
 	}
@@ -240,6 +246,9 @@ server.onmessage = function(event) {
 		endVoting();
 		showResults();
 		allPlayers = message.arguments.sortedPlayers;
+	}
+	if(message.operation == "update_score") {
+		score = message.arguments.score;
 	}
 }
 
