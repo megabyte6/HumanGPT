@@ -56,6 +56,7 @@ export default class Game {
     }
 
     start() {
+        this.players.forEach((player)=>player.reset())
         this.stage = "wait_prompts"
         let words = ["Where", "What", "Why", "How"]
         this.handler?.start_game(words[Math.floor((words.length - 1) * Math.random()) + 1]);

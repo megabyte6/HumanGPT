@@ -6,7 +6,7 @@ export default class Player {
 
     client: WebSocket
     name: string
-    score: number = 0
+    _score: number = 0;
     game: Game
     origPrompt: string | undefined
     origResponse: string | undefined
@@ -25,6 +25,24 @@ export default class Player {
             this.game.log(`${name} left the party.`, LogTypes.leave)
             this.game.playerLeave(this.client)
         })
+    }
+
+    set score(score: number){
+        this._score = score;
+        this.game.handler?.update_score(this, score);
+    }
+
+    get score(){
+        return this._score;
+    }
+
+    reset(){
+        this.origPrompt = undefined;
+        this.origResponse = undefined;
+        this.newPrompt = undefined;
+        this.newResponse = undefined;
+        this.rearrangedResponse = undefined;
+        this.voted = false;
     }
 
 }

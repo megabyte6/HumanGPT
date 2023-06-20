@@ -184,6 +184,16 @@ export default class MessageHandler {
         this.broadcast(data)
     }
 
+    update_score(player: Player, score: number) {
+        let data: Message = {
+            operation: "update_score",
+            arguments: {
+                score: score
+            }
+        }
+        player.client.send(JSON.stringify(data))
+    }
+
     start_game(word: String) {
         let data: Message = {
             operation: "start_game",
