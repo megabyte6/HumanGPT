@@ -92,8 +92,8 @@ export default class MessageHandler {
 
     //host triggers the game start
     trigger_start(client: WebSocket, data: Message) {
-        if (this.game.stage != "wait_players")
-            return
+        /*if (this.game.stage != "wait_players")
+            return*/
 
         if (this.game.host?.client === client)
             this.game.start()
