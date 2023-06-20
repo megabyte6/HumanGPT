@@ -94,7 +94,7 @@ function draw() {
 		fill(50, 168, 109);
 		text("Enter A Chat Gpt Prompt", 250, 125);
 		textSize(12);
-		text("How", 161, 158);
+		text(question, 161, 158);
 	}
 	if(stage == 2) {
 		noStroke();
@@ -257,7 +257,7 @@ function startGame() {
 	nameInput.size(500, 100);
 	nameInput.elt.focus();
 	nameInput.position(windowWidth / 2 - 250, windowHeight / 2 - 20);
-	nameInput.value(" ");
+	nameInput.value("");
 }
 
 function endVoting() {
