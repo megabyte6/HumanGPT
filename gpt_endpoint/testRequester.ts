@@ -7,12 +7,12 @@ let rl = readline.createInterface({
 });
 let gpt = new GPT4FreeRequester();
 
-function triggerquestion() {
+function triggerQuestion() {
     rl.question("Prompt: ", async (answer) => {
         let reply = await gpt.getResponse(answer);
-        console.log("AI:", reply);
+        console.log("AI: ", reply);
 
-        setTimeout(triggerquestion, 10);
+        setTimeout(triggerQuestion, 10);
     });
 }
-triggerquestion();
+triggerQuestion();

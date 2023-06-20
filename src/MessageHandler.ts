@@ -1,8 +1,8 @@
 import { WebSocket, WebSocketServer } from "ws"
 import Game from "./Game"
-import Player from "./Player"
 import Host from "./Host"
 import LogTypes from "./LogTypes"
+import Player from "./Player"
 
 export default class MessageHandler {
 

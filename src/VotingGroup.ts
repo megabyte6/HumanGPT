@@ -1,7 +1,7 @@
-import Game from "./Game"
-import Player from "./Player"
+import Game from "./Game";
+import Player from "./Player";
 
-export class VotingGroup {
+export default class VotingGroup {
 
     players: Player[]
     votes = new Map<Player, number>()

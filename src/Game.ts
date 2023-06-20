@@ -1,10 +1,10 @@
-import Player from "./Player"
-import Host from "./Host"
 import { WebSocket } from "ws"
 import GPT4FreeRequester from "./GPT4FreeRequester"
-import MessageHandler from "./MessageHandler"
+import Host from "./Host"
 import LogTypes from "./LogTypes"
-import { VotingGroup } from "./Voting"
+import MessageHandler from "./MessageHandler"
+import Player from "./Player"
+import VotingGroup from "./VotingGroup"
 
 export default class Game {
 
