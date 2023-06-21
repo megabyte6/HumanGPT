@@ -3,7 +3,7 @@ node_modules/
 dist
 
 # Python virtual environment
-venv
+.venv
 
 # Environment files
 .env
