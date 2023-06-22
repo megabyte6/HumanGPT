@@ -217,7 +217,7 @@ function keyPressed() {
 			msg = {
 				operation: "submit_prompt",
 				arguments: {
-					"prompt": question + " " + prompt
+					"prompt": question + " " + prompt.trim()
 				}
 			}
 			server.send(JSON.stringify(msg));
