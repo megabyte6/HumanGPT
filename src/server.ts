@@ -12,7 +12,7 @@ import internal = require("stream")
 import chalk = require("chalk")
 
 const PORT = 8080
-const LOAD_BOT = true
+const LOAD_BOT = false
 
 const app = express()
 app.use("/", express.static(path.resolve(__dirname, "../client")))
