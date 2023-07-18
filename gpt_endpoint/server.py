@@ -61,24 +61,18 @@ class Server:
         gpt_request = json.loads(data)
         response = {}
 
-        response["response"] = await asyncio.get_event_loop().run_in_executor(
-            None,
-            self.generate_response,
-            gpt_request["request"],
-            gpt_request["chat"],
+        # Make the request to gpt4free asynchronously
+        response["response"] = await asyncio.to_thread(
+            Completion.create,
+            provider=Provider.You,
+            prompt=gpt_request["request"],
+            chat=gpt_request["chat"],
         )
 
         if self.verbose:
             print(f"Response: {response}\n")
 
         return web.json_response(response)
-
-    def generate_response(self, prompt, chat):
-        return Completion.create(
-            provider=Provider.You,
-            prompt=prompt,
-            chat=chat,
-        )
 
 
 if __name__ == "__main__":
